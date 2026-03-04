@@ -1,0 +1,14 @@
+# Environment & Secrets
+.env
+client_secret.json
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# OS
+.DS_Store
+
+# OpenClaw internals
+.openclaw/
+.pi/

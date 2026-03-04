@@ -1,0 +1,56 @@
+# AGENTS.md - Pipeline Definition
+
+## Core Pipeline: Onboard → Collect → Match → Merge → Upsert → Log → Resume
+
+### Onboarding
+- Ask Q1: Target companies
+- Ask Q2: Target titles/keywords
+- Ask Q3: ZoomInfo access mode
+- Ask Q4: LinkedIn session method
+- Ask Q5: Google Sheets URL/ID
+- Verify sheet access
+
+### Collect (LinkedIn)
+- Use browser with Kyle's logged-in session
+- Search People by company × fixed title list
+- Title list (always use these): IT operations, SRE, Cloud Operations, DevOps, Infrastructure, Architect, Application Support, Production Support, Observability, Site Reliability Engineer, Change Management, Incident management, AI
+- **ALWAYS open FULL profile** to capture: Name, Title, Company, Location, LinkedIn URL, Headline, Summary, Experience, Education
+- Collect all available fields from profile
+- **Blocker response:** Stop, explain, ask Kyle
+
+### Match (ZoomInfo)
+- Search ZoomInfo by name + company
+- Extract: Email, Phone, Direct Dial, ZoomInfo URL, Company Domain, Industry, Size, Revenue
+- Assign match_confidence (0-100)
+- **If not found:** Mark as "Not found in ZoomInfo" — proceed with LinkedIn data
+
+### Merge
+- Single record per person
+- Add: linkedin_collected_at, zoominfo_enriched_at, match_confidence, quality_score
+
+### Upsert to Google Sheets
+- **Unique key:** LinkedIn URL
+- IF exists → update missing/weaker fields only
+- IF new → append row
+- **Never delete data, never overwrite verified data**
+
+### Run Summary
+- Append to `Run Summary` tab: Run ID, Targets, Leads Found, Enriched, Skipped, Start, End, Notes
+- Write to `memory/YYYY-MM-DD.md`
+
+### Dedupe Rule
+- LinkedIn URL is unique key
+
+### Done Definition
+- Leads written to Google Sheets
+- Run Summary appended
+
+### Target Persona Context (Evolven)
+- **Ideal Persona:** IT executives (VP Engineering, Director, CTO, CIO, CISO) who care about:
+  - Organizational risk
+  - Security
+  - Audit
+  - Configuration management
+  - IT operations reliability
+- **Pain Point:** 90%+ of outages, incidents, breaches caused by config changes/misconfigs
+- **Value Prop:** Evolven collects every config in IT estate, reports every change
