@@ -59,6 +59,10 @@
 
 When a task involves LinkedIn -> Google Sheet -> ZoomInfo enrichment, always load and follow the `linkedin_zoominfo_sop` skill.
 
+Validation check (run at start of each LinkedIn/ZoomInfo task):
+- `bash scripts/validate_linkedin_zoominfo_sop.sh`
+- if validation fails, stop and report before doing any browser or sheet actions
+
 Do not improvise or switch methods mid-run.
 Use two phases only:
 1. LinkedIn + Google Sheet
