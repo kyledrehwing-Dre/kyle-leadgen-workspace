@@ -54,3 +54,19 @@
   - IT operations reliability
 - **Pain Point:** 90%+ of outages, incidents, breaches caused by config changes/misconfigs
 - **Value Prop:** Evolven collects every config in IT estate, reports every change
+
+## LinkedIn / ZoomInfo workflow rule
+
+When a task involves LinkedIn -> Google Sheet -> ZoomInfo enrichment, always load and follow the `linkedin_zoominfo_sop` skill.
+
+Do not improvise or switch methods mid-run.
+Use two phases only:
+1. LinkedIn + Google Sheet
+2. ZoomInfo + Google Sheet
+
+Never write ZoomInfo data by row number alone.
+Locate the destination row by LinkedIn profile URL, then verify Company Name and Full Name before writing.
+
+Do not open unnecessary tabs or sessions.
+Do not duplicate LinkedIn profile URLs.
+If page context, login state, or destination row cannot be verified, stop and report instead of guessing.
