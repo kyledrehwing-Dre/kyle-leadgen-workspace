@@ -20,7 +20,7 @@ IT executives who care about:
 - Cloud Operations
 - DevOps
 - Infrastructure
-- Architect
+- Enterprise Architecture
 - Application Support
 - Production Support
 - Observability
@@ -34,9 +34,12 @@ IT executives who care about:
 ### Google Sheets (gog)
 - **Spreadsheet ID:** 18lfYgX03Q1sw9uLm-kSeutcNeyigjXQElSjatYbjgUI
 - **URL:** https://docs.google.com/spreadsheets/d/18lfYgX03Q1sw9uLm-kSeutcNeyigjXQElSjatYbjgUI
-- **Target Tab:** Original Sheet Q1-2026
-- **gog command:** `GOG_ACCOUNT=Kyle.Drehwing@gmail.com gog sheets get 18lfYgX03Q1sw9uLm-kSeutcNeyigjXQElSjatYbjgUI "'Original Sheet Q1-2026'!A:Z" --json`
-- **Columns:** Company | Name | Title | Email | Phone | LinkedIn | Notes | Senad Notes
+- **Source Tab:** Daily Targets
+- **Destination Tab:** Updated Format
+- **Read targets command:** `GOG_ACCOUNT=Kyle.Drehwing@gmail.com gog sheets get 18lfYgX03Q1sw9uLm-kSeutcNeyigjXQElSjatYbjgUI "'Daily Targets'!A:F" --json`
+- **Read destination command:** `GOG_ACCOUNT=Kyle.Drehwing@gmail.com gog sheets get 18lfYgX03Q1sw9uLm-kSeutcNeyigjXQElSjatYbjgUI "'Updated Format'!A:N" --json`
+- **Daily Targets columns:** Account | Date Added | Target Status | Last Run ID | Last Updated At | Notes
+- **Updated Format columns:** Company Name | Full Name | Last Name | First Name | Job Title | LinkedIn profile link | Location | Email address | Mobile phone number | LinkedIn Phase Status | ZoomInfo Phase Status | Last Updated At | Run ID | Notes
 
 ### Target Companies
 _(To be provided daily)_
@@ -49,6 +52,6 @@ _(To be provided daily)_
 - Use Kyle's logged-in Chrome profile
 
 ## Runtime State
-- **Last Run:** 2026-02-26
-- **Targets Processed:** Capital One (SRE)
-- **Total Leads in Sheet:** 232 (added 10 new)
+- **Last Run:** 2026-03-09
+- **Targets Processed:** Hearst (2 high-quality leads)
+- **Total Leads in Sheet:** 234 (added 2 new)

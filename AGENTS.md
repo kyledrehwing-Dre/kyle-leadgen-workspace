@@ -13,7 +13,7 @@
 ### Collect (LinkedIn)
 - Use browser with Kyle's logged-in session
 - Search People by company × fixed title list
-- Title list (always use these): IT operations, SRE, Cloud Operations, DevOps, Infrastructure, Architect, Application Support, Production Support, Observability, Site Reliability Engineer, Change Management, Incident management, AI
+- Title list (always use these): IT operations, SRE, Cloud Operations, DevOps, Infrastructure, Enterprise Architecture, Application Support, Production Support, Observability, Site Reliability Engineer, Change Management, Incident management, AI
 - **ALWAYS open FULL profile** to capture: Name, Title, Company, Location, LinkedIn URL, Headline, Summary, Experience, Education
 - Collect all available fields from profile
 - **Blocker response:** Stop, explain, ask Kyle
@@ -68,9 +68,20 @@ Use two phases only:
 1. LinkedIn + Google Sheet
 2. ZoomInfo + Google Sheet
 
-Never write ZoomInfo data by row number alone.
-Locate the destination row by LinkedIn profile URL, then verify Company Name and Full Name before writing.
+Tab control is strict:
+- only use `Daily Targets` and `Updated Format`
+- do not read/write any other tab unless user explicitly asks
 
+Status columns are mandatory:
+- `Daily Targets` column C = Target Status (`Pending|In Progress|Completed|Blocked|Skipped`)
+- `Updated Format` column J = LinkedIn Phase Status
+- `Updated Format` column K = ZoomInfo Phase Status
+
+Never write ZoomInfo data by row number alone.
+Locate destination row by LinkedIn profile URL, then verify Company Name and Full Name before writing.
+
+Use canonical LinkedIn people-search with `Current company = <target company>` always applied.
 Do not open unnecessary tabs or sessions.
 Do not duplicate LinkedIn profile URLs.
-If page context, login state, or destination row cannot be verified, stop and report instead of guessing.
+
+If page context, login state, Chrome relay attachment, required tabs/columns, or destination row identity cannot be verified, stop and report instead of guessing.
