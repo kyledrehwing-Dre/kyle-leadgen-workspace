@@ -301,3 +301,258 @@ At the end, report:
 - number of rows enriched (K=`Enriched`)
 - number marked `Not Found`
 - any blockers encountered
+
+---
+
+# STRENGTHENING PATCH - EXHAUSTIVE COVERAGE RULES
+
+## 0. PURPOSE OF THIS PATCH
+
+The current failure mode is shallow execution:
+- stopping after a small batch
+- treating a first pass as completion
+- requiring user nudges to continue
+- under-exploring query/result space within the approved SOP
+
+This patch strengthens execution standard, continuation behavior, and definition of completion.
+All original schema, tab, status, row-identity, and safety constraints remain in force unless explicitly overridden below.
+
+## 1. NON-NEGOTIABLE RULE: 10 CONTACTS IS NOT COMPLETION
+
+If you find 10 contacts for a company, that is never by itself evidence of completion.
+
+Treat any batch of 10 as a likely intermediate retrieval state unless you have strong evidence that:
+- all 13 approved terms were fully run
+- paging/scrolling rules were followed per term
+- dedupe was applied
+- additional diversified searches within SOP constraints no longer produce meaningful new LinkedIn profile URLs
+
+**Never stop because:**
+- "10 seems like enough"
+- "I found some names already"
+- "results look decent"
+- "the user didn't explicitly say continue"
+
+If more reasonable search work remains inside the SOP, continue automatically.
+
+## 2. THIS SOP MUST BE EXECUTED AS A LOOP, NOT A ONE-SHOT PASS
+
+For each company, you must operate in repeated cycles:
+
+**Cycle structure:**
+1. Run approved LinkedIn search term(s)
+2. Collect results
+3. Deduplicate by LinkedIn profile URL
+4. Assess coverage gaps
+5. Continue with remaining approved terms and pages
+6. Only after all approved angles are exhausted may you consider stopping
+
+For each company, do not move on simply because one or two terms produced enough results.
+The company is complete only when:
+- all 13 approved terms have been attempted
+- each term has been paged/scrolled according to SOP stop rules
+- duplicate suppression has been applied
+- additional yield has materially collapsed
+
+## 3. APPROVED EXHAUSTIVENESS STANDARD WITHIN THIS SOP
+
+You must remain strictly within the SOP's allowed search method.
+That means:
+- do not invent new title terms
+- do not switch to a different sourcing workflow
+- do not use unapproved tabs
+- do not improvise alternate pipelines
+
+**But within those constraints, you must search exhaustively.**
+
+That means for every eligible company:
+- run all 13 approved terms
+- verify current company filter chip is visible for every search
+- continue paging/scrolling for each term until the SOP stopping rule is actually met
+- dedupe against existing LinkedIn URLs in Updated Format column F
+- do not stop after the first useful term
+- do not stop after the first page unless no-results is explicit
+- do not collapse the remaining terms just because some overlap is expected
+
+## 4. MANDATORY TERM-BY-TERM COMPLETION
+
+For each company, all of the following approved terms must be attempted unless a hard blocker occurs:
+
+1. IT operations
+2. SRE
+3. Cloud Operations
+4. DevOps
+5. Infrastructure
+6. Enterprise Architecture
+7. Application Support
+8. Production Support
+9. Observability
+10. Site Reliability Engineer
+11. Change Management
+12. Incident management
+13. AI
+
+**Rules:**
+- no term may be silently skipped
+- no term may be assumed redundant
+- overlapping titles do not justify skipping a term
+- if a term produces zero results, that still counts as attempted only after verified search execution
+- if LinkedIn blocks, captcha appears, login drops, or context becomes uncertain, stop and report blocker rather than pretending completion
+
+## 5. DEEPER PAGING / STOPPING INTERPRETATION
+
+The SOP already says for each term continue until:
+- 2 consecutive pages produce 0 new unique LinkedIn URLs
+- OR 10 pages have been checked
+- OR LinkedIn shows no results
+
+You must apply this literally and strictly.
+
+**Interpretation rules:**
+- do not stop a term after one page if page 1 had results
+- do not stop because "results started looking repetitive" unless the 2-consecutive-pages-zero-new-URLs condition is actually met
+- if exactly 10 or another suspiciously capped number of people were found for a term or company, assume more may exist and continue through remaining pages/terms
+- page exhaustion is term-specific, not company-wide
+- completion requires exhausting each term's search path, not just the company overall
+
+## 6. COVERAGE-GAP ASSESSMENT IS REQUIRED
+
+After each term, and again before marking a company Completed, assess whether coverage still looks thin.
+
+**Examples of thin coverage:**
+- only one department surfaced
+- only one seniority band surfaced
+- only generic infra titles surfaced
+- only obvious executives surfaced
+- only AI titles surfaced but no ops/SRE/DevOps people
+- results are concentrated in one narrow phrasing
+
+If coverage is still thin and unrun approved terms remain, continue.
+If all approved terms were run and additional pages yield no new URLs, only then may you stop.
+
+## 7. AUTONOMOUS CONTINUATION RULE
+
+**Never wait for the user to say "continue."**
+
+If:
+- there are unrun approved terms
+- pages remain under the SOP limits
+- recent searches are still producing new unique LinkedIn URLs
+- company status is still In Progress
+
+Then continue autonomously.
+
+User nudging is not part of successful execution.
+Manual babysitting means you failed to finish the loop.
+
+## 8. FALSE-COMPLETION AUDIT BEFORE MARKING A COMPANY COMPLETED
+
+Before changing a company in Daily Targets to Completed, you must internally verify all of the following:
+
+- [ ] Did I run all 13 approved terms?
+- [ ] Did I verify company filter context before each search?
+- [ ] Did I continue paging/scrolling each term until SOP stop condition was met?
+- [ ] Did I dedupe against Updated Format column F?
+- [ ] Did I avoid relying on row position alone?
+- [ ] Did I avoid stopping just because I had "enough" contacts?
+- [ ] Did I avoid requiring the user to tell me to continue?
+
+If any answer is no, do not mark Completed.
+Continue the company loop or mark Blocked only if a real blocker exists.
+
+## 9. UPDATED COMPANY COMPLETION STANDARD
+
+A company may be marked Completed only when all of the following are true:
+
+1. Company status was first set to In Progress with RUN_ID and timestamp
+2. All 13 approved terms were attempted
+3. Each term was paged/scrolled until:
+   - 2 consecutive pages produced 0 new unique LinkedIn URLs
+   - OR 10 pages were checked
+   - OR LinkedIn explicitly showed no results
+4. All discovered people were deduped by LinkedIn URL
+5. All new valid people were appended correctly to Updated Format
+6. No unresolved page-context, login, relay, or schema uncertainty exists
+
+**Otherwise:**
+- keep status as In Progress while work remains
+- OR mark Blocked with reason if a hard stop condition occurs
+
+## 10. UPDATED DEFINITION OF FAILURE
+
+The following are failures:
+
+- stopping after a single shallow search pass
+- finding around 10 contacts and acting like the company is done
+- running only a subset of approved terms without blocker justification
+- not paging until SOP stop conditions are met
+- waiting for user nudges when more approved search work exists
+- treating first-page results as exhaustive coverage
+- marking Completed due to inertia rather than evidence
+
+## 11. REQUIRED PROGRESS TRANSPARENCY
+
+After each company search cycle, report transparently:
+
+- Company name
+- RUN_ID
+- Approved terms completed so far / 13
+- Total unique LinkedIn URLs found so far for this company
+- New unique URLs added in this cycle
+- Terms attempted in this cycle
+- Whether paging stop conditions were met for those terms
+- Remaining approved terms not yet run
+- Whether continuing or stopping, and why
+
+**Example decision language:**
+- "Continuing: 5 of 13 approved terms remain, and latest cycle added 7 new unique LinkedIn URLs"
+- "Continuing: all terms run, but last term has not yet met 2 consecutive pages with 0 new URLs"
+- "Stopping: all 13 terms completed, paging exhausted per SOP, later pages returned only duplicates/no new URLs"
+- "Blocked: LinkedIn session lost after term 8; company left Blocked with reason"
+
+## 12. PHASE 2 PERSISTENCE RULE
+
+This same persistence principle applies to ZoomInfo enrichment, while preserving all row-identity rules.
+
+For rows in current RUN_ID where K = Pending:
+- do not stop enrichment early because some rows were enriched
+- continue until every eligible row from this RUN_ID has K not equal to Pending
+- never trust row position alone
+- always locate by LinkedIn profile URL in column F
+- verify company name and full name before write-back
+- if ambiguous, mark appropriately instead of guessing
+- if no confident match is found, use the SOP Not Found handling exactly
+
+**Phase 2 is incomplete while any current-run row still has K = Pending unless a blocker stops execution.**
+
+## 13. DO NOT REWIRE AWAY FROM THE SOP — REWIRE INTO IT
+
+Important:
+- You are NOT authorized to abandon the SOP.
+- You are authorized and required to execute it more rigorously.
+
+That means:
+- preserve two-phase structure
+- preserve allowed tabs
+- preserve schema and status values
+- preserve dedupe key = LinkedIn profile URL
+- preserve row identity rules
+- preserve approved search terms only
+- preserve blocker handling
+- strengthen persistence
+- strengthen completion standards
+- strengthen continuation behavior
+
+## 14. EXECUTION PRINCIPLE
+
+Optimize for thoroughness, determinism, and autonomous continuation.
+
+**Your standard is NOT:**
+"Did I get a handful of names?"
+
+**Your standard IS:**
+"Did I fully execute the allowed SOP search space for this company before stopping?"
+
+If not, continue.
+
+Apply this to every company in the run.
