@@ -64,6 +64,11 @@ if [[ -f "$skill_file" ]]; then
   require_fixed "$skill_file" "The row must be identified by LinkedIn profile URL in column F." "skill enforces LinkedIn URL row identity"
   require_fixed "$skill_file" "2 consecutive pages produce 0 new unique LinkedIn URLs" "skill enforces deterministic paging stop rule"
   require_fixed "$skill_file" "3 consecutive execution errors occur" "skill defines hard error stop rule"
+  require_fixed "$skill_file" "10 CONTACTS IS NOT COMPLETION" "skill includes exhaustive coverage patch"
+  require_fixed "$skill_file" "THIS SOP MUST BE EXECUTED AS A LOOP" "skill enforces loop execution"
+  require_fixed "$skill_file" "MANDATORY TERM-BY-TERM COMPLETION" "skill enforces all 13 terms"
+  require_fixed "$skill_file" "PHASE 2 PERSISTENCE RULE" "skill enforces Phase 2 persistence"
+  require_fixed "$skill_file" "AUTONOMOUS CONTINUATION RULE" "skill enforces autonomous continuation"
 fi
 
 if [[ -f "$agents_file" ]]; then

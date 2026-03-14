@@ -5,20 +5,52 @@
 ### Morning Check (via Cron - 6 AM daily)
 - [ ] Check for new targets in Google Sheet (look for "Daily Targets" tab or new entries)
 - [ ] OR check chat for target message from Kyle
-- [ ] If targets exist → execute pipeline
-- [ ] If last run incomplete → resume
+- [ ] If targets exist → execute pipeline following linkedin_zoominfo_sop skill + exhaustive coverage patch
+- [ ] If last run incomplete → resume from where it left off (check Daily Targets status)
 - [ ] If sheet not updated in last run → repair
 
-### Pipeline Steps
-1. LinkedIn search for each company × title combo
-2. ZoomInfo enrichment (continue if partial)
-3. Upsert to Google Sheets
-4. Write run summary to memory/
+### Pipeline Steps (MUST FOLLOW EXHAUSTIVELY)
+1. **Validation:** Run `bash scripts/validate_linkedin_zoominfo_sop.sh` before starting
+2. **Company Loop:** For each target company:
+   - Set Daily Targets status to `In Progress` with RUN_ID and timestamp
+   - Run ALL 13 approved terms in order:
+     1. IT operations
+     2. SRE
+     3. Cloud Operations
+     4. DevOps
+     5. Infrastructure
+     6. Enterprise Architecture
+     7. Application Support
+     8. Production Support
+     9. Observability
+     10. Site Reliability Engineer
+     11. Change Management
+     12. Incident management
+     13. AI
+   - For EACH term: page until 2 consecutive pages produce 0 new unique LinkedIn URLs, OR 10 pages checked
+   - Dedupe against existing LinkedIn URLs in Updated Format column F
+   - Continue until ALL 13 terms are attempted AND paging exhausted
+   - **STOP ONLY WHEN:** all terms run + paging exhausted + no new URLs emerging
+   - Mark company `Completed` only after meeting completion audit criteria
+3. **Phase 2:** ZoomInfo enrichment for all rows where K = Pending from this run
+   - Continue until ALL K = Pending rows are resolved (Enriched or Not Found)
+4. **Write run summary** to `memory/YYYY-MM-DD.md`
+
+### Completion Audit (MUST PASS BEFORE MARKING DONE)
+For each company, verify ALL of:
+- [ ] All 13 approved terms were attempted
+- [ ] Company filter chip verified before each search
+- [ ] Each term paged until stop condition met
+- [ ] Dedupe against column F applied
+- [ ] No reliance on row position
+- [ ] Did NOT stop just because "enough" contacts found
+- [ ] Did NOT require user nudges to continue
 
 ### If Blocked
 - Stop and explain issue clearly
-- Notify Kyle for resolution
-- Do not continue without guidance
+- Set Daily Targets status to `Blocked` with reason in Notes column
+- Do NOT mark Completed prematurely
 
 ### Otherwise
-- HEARTBEAT_OK
+- If all targets processed and completion audit passed → normal completion
+- If no targets found → HEARTBEAT_OK

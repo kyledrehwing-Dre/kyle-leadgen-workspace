@@ -35,15 +35,22 @@
 - **Never delete data, never overwrite verified data**
 
 ### Run Summary
-- Append to `Run Summary` tab: Run ID, Targets, Leads Found, Enriched, Skipped, Start, End, Notes
-- Write to `memory/YYYY-MM-DD.md`
+- Write to `memory/YYYY-MM-DD.md` (NOT to a spreadsheet tab)
 
 ### Dedupe Rule
 - LinkedIn URL is unique key
 
 ### Done Definition
-- Leads written to Google Sheets
-- Run Summary appended
+A company is Completed ONLY when ALL of:
+- [ ] All 13 approved terms were attempted for the company
+- [ ] Each term was paged until stop condition met (2 consecutive pages with 0 new URLs, OR 10 pages)
+- [ ] All discovered people were deduplicated by LinkedIn URL
+- [ ] All new valid people were appended to Updated Format with correct status
+- [ ] Company status in Daily Targets set to `Completed` with RUN_ID and timestamp
+- [ ] Phase 2 completed: all K=Pending rows from this run resolved to Enriched or Not Found
+- [ ] Run summary written to `memory/YYYY-MM-DD.md`
+
+**NEVER stop after finding a handful of contacts. 10 contacts is NOT completion evidence.**
 
 ### Target Persona Context (Evolven)
 - **Ideal Persona:** IT executives (VP Engineering, Director, CTO, CIO, CISO) who care about:
@@ -58,6 +65,16 @@
 ## LinkedIn / ZoomInfo workflow rule
 
 When a task involves LinkedIn -> Google Sheet -> ZoomInfo enrichment, always load and follow the `linkedin_zoominfo_sop` skill.
+
+**IMPORTANT:** Also load and follow the EXHAUSTIVE COVERAGE PATCH embedded in the skill (Sections 0-14). This patch enforces:
+- 10 contacts is NOT completion
+- Loop execution (not one-shot pass)
+- Mandatory term-by-term completion (all 13 terms)
+- Strict paging rules
+- Coverage-gap assessment
+- Autonomous continuation (no user nudges)
+- False-completion audit before marking done
+- Phase 2 persistence rule
 
 Validation check (run at start of each LinkedIn/ZoomInfo task):
 - `bash scripts/validate_linkedin_zoominfo_sop.sh`
