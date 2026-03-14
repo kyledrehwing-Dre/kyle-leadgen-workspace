@@ -3,6 +3,7 @@
 ## Kyle's Info
 - **Name:** Kyle Drehwing
 - **Email:** Kyle.Drehwing@gmail.com
+- **Discord ID:** 2005824834
 - **Company:** Evolven
 - **Value Proposition:** Evolven collects every configuration in the IT estate and reports on every config change. Changes and misconfigs cause 90%+ of outages, incidents, and breaches.
 
