@@ -1,149 +1,141 @@
 # AGENTS.md - Pipeline Definition
+SPEC_VERSION: leadgen-canonical-v3
 
-## Core Pipeline: Onboard → Collect → Match → Merge → Upsert → Log → Resume
+## Core Pipeline
+Validate -> Verify browser/session -> Select eligible targets -> Phase 1 LinkedIn capture -> Phase 2 ZoomInfo enrichment -> Safe Google Sheets upsert -> Memory log -> Resume
 
-### Onboarding
-- Ask Q1: Target companies
-- Ask Q2: Target titles/keywords
-- Ask Q3: ZoomInfo access mode
-- Ask Q4: LinkedIn session method
-- Ask Q5: Google Sheets URL/ID
-- Verify sheet access
+## Canonical browser-session rule
+Browser session rule: use the profile that verifiably attaches to Kyle's already logged-in Chrome session; do not assume a profile name.
 
-### Collect (LinkedIn)
-- Use browser with Kyle's logged-in session
-- Search People by company × fixed title list
-- Title list (always use these): IT operations, SRE, Cloud Operations, DevOps, Infrastructure, Enterprise Architecture, Application Support, Production Support, Observability, Site Reliability Engineer, Change Management, Incident management, AI
-- **ALWAYS open FULL profile** to capture: Name, Title, Company, Location, LinkedIn URL, Headline, Summary, Experience, Education
-- Collect all available fields from profile
-- **NEVER ask "should I continue"** - Continue autonomously until all 10 terms are exhausted AND paging stops yielding new results
-- **Blocker response:** Stop, explain, ask Kyle
-
-### ⚠️ MANDATORY COVERAGE (NEVER SKIP)
-**For each company, you MUST run ALL 10 terms:**
+## Canonical 13-term search universe
 1. IT operations
-2. Cloud Operations
-3. DevOps
-4. Infrastructure
-5. Enterprise Architecture
-6. Observability
-7. Site Reliability Engineer (SRE)
-8. Change Management
-9. Incident management
-10. AI
+2. SRE
+3. Cloud Operations
+4. DevOps
+5. Infrastructure
+6. Enterprise Architecture
+7. Application Support
+8. Production Support
+9. Observability
+10. Site Reliability Engineer
+11. Change Management
+12. Incident management
+13. AI
 
-**Completion = ALL 10 terms attempted + paging exhausted.**
-- 10 contacts is NOT completion
-- "Enough contacts found" is NOT completion
-- You must mark company done only after all 10 terms searched with proper paging (2 consecutive empty pages OR 10 pages)
+10 contacts is NOT completion.
 
-### Match (ZoomInfo)
-- Search ZoomInfo by name + company
-- Extract: Email, Phone, Direct Dial, ZoomInfo URL, Company Domain, Industry, Size, Revenue
-- Assign match_confidence (0-100)
-- **If not found:** Mark as "Not found in ZoomInfo" — proceed with LinkedIn data
+## LinkedIn collection order
+1. Preferred: verified LinkedIn / Sales Navigator path if session and filters work.
+2. Fallback A: standard LinkedIn company people path with verified company context.
+3. Fallback B: company-page / associated-members browsing when people-search returns false zero or is anti-automation blocked.
 
-### Merge
-- Single record per person
-- Add: linkedin_collected_at, zoominfo_enriched_at, match_confidence, quality_score
+False zero != no people.
+Company ambiguity is a blocker.
+Always verify company context before every search.
+Always open the full profile for every kept contact.
+Do not switch methods silently; log the exact reason when falling back.
 
-### Upsert to Google Sheets
-- **Unique key:** LinkedIn URL
-- IF exists → update missing/weaker fields only
-- IF new → append row
-- **Never delete data, never overwrite verified data**
+## ZoomInfo enrichment order
+1. Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
+2. Fallback: company page -> Employees -> Information Technology department.
+3. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
-### Run Summary
-- Write to `memory/YYYY-MM-DD.md` (NOT to a spreadsheet tab)
+Batch convenience must never weaken row-identity rules.
 
-### Dedupe Rule
-- LinkedIn URL is unique key
-
-### Row Finding Safety Rules (CRITICAL)
-Before adding ANY new contacts to Updated Format, ALWAYS follow these steps:
-
-1. **Find last row with data FIRST**
-   - Query column A (Company Name) to find the last non-empty row
-   - Do NOT assume the sheet ends at a specific row number
-   - The sheet may have data at high row numbers (e.g., row 3210+)
-
-2. **Check for existing company contacts**
-   - Before adding, search column F (LinkedIn URL) for any existing contacts from the same company
-   - If company already has contacts, append after the last one for that company
-
-3. **Verify destination row is empty**
-   - Read the destination range BEFORE writing to confirm it's truly empty
-   - Check all columns (A through N) are blank
-
-4. **Never assume end of sheet is empty**
-   - Rows beyond 3000 may contain data from previous runs
-   - Always query to find actual last row
-
-5. **Validate before write**
-   - Confirm row number is sequential to last existing data
-   - Verify Company Name and LinkedIn URL columns are blank
-
-If destination row cannot be verified as empty, STOP and report to Kyle instead of guessing.
-
-### Done Definition
-A company is Completed ONLY when ALL of:
-- [ ] All 10 approved terms were attempted for the company
-- [ ] Each term was paged until stop condition met (2 consecutive pages with 0 new URLs, OR 10 pages)
-- [ ] All discovered people were deduplicated by LinkedIn URL
-- [ ] All new valid people were appended to Updated Format with correct status
-- [ ] Company status in Daily Targets set to `Completed` with RUN_ID and timestamp
-- [ ] Phase 2 completed: all K=Pending rows from this run resolved to Enriched or Not Found
-- [ ] Run summary written to `memory/YYYY-MM-DD.md`
-
-**NEVER stop after finding a handful of contacts. 10 contacts is NOT completion evidence.**
-
-### Target Persona Context (Evolven)
-- **Ideal Persona:** IT executives (VP Engineering, Director, CTO, CIO, CISO) who care about:
-  - Organizational risk
-  - Security
-  - Audit
-  - Configuration management
-  - IT operations reliability
-- **Pain Point:** 90%+ of outages, incidents, breaches caused by config changes/misconfigs
-- **Value Prop:** Evolven collects every config in IT estate, reports every change
-
-## LinkedIn / ZoomInfo workflow rule
-
-When a task involves LinkedIn -> Google Sheet -> ZoomInfo enrichment, always load and follow the `linkedin_zoominfo_sop` skill.
-
-**IMPORTANT:** Also load and follow the EXHAUSTIVE COVERAGE PATCH embedded in the skill (Sections 0-14). This patch enforces:
-- 10 contacts is NOT completion
-- Loop execution (not one-shot pass)
-- Mandatory term-by-term completion (all 10 terms)
-- Strict paging rules
-- Coverage-gap assessment
-- Autonomous continuation (no user nudges)
-- False-completion audit before marking done
-- Phase 2 persistence rule
-
-Validation check (run at start of each LinkedIn/ZoomInfo task):
-- `bash scripts/validate_linkedin_zoominfo_sop.sh`
-- if validation fails, stop and report before doing any browser or sheet actions
-
-Do not improvise or switch methods mid-run.
-Use two phases only:
-1. LinkedIn + Google Sheet
-2. ZoomInfo + Google Sheet
-
-Tab control is strict:
-- only use `Daily Targets` and `Updated Format`
-- do not read/write any other tab unless user explicitly asks
-
-Status columns are mandatory:
-- `Daily Targets` column C = Target Status (`Pending|In Progress|Completed|Blocked|Skipped`)
-- `Updated Format` column J = LinkedIn Phase Status
-- `Updated Format` column K = ZoomInfo Phase Status
-
+## Sheets invariants
+Only operate these tabs: `Daily Targets` and `Updated Format`.
+Datastore = Google Sheets only.
+Dedupe key = LinkedIn URL.
+Locate writeback rows by LinkedIn URL first, then verify Company Name + Full Name.
 Never write ZoomInfo data by row number alone.
-Locate destination row by LinkedIn profile URL, then verify Company Name and Full Name before writing.
+Never assume end-of-sheet is empty.
+Verify destination row/range before append/update.
+Never overwrite verified data with weaker data.
+Never delete data.
+Post-write verification: re-locate the row by LinkedIn URL and confirm written values match.
 
-Use canonical LinkedIn people-search with `Current company = <target company>` always applied.
-Do not open unnecessary tabs or sessions.
-Do not duplicate LinkedIn profile URLs.
+## Status invariants
+### `Daily Targets` column C allowed values
+- Pending
+- In Progress
+- Completed
+- Blocked
+- Skipped
 
-If page context, login state, Chrome relay attachment, required tabs/columns, or destination row identity cannot be verified, stop and report instead of guessing.
+### `Updated Format` column J allowed values
+- Added
+- Duplicate-Skipped
+- Blocked
+
+### `Updated Format` column K allowed values
+- Pending
+- Enriched
+- Not Found
+- Blocked
+
+## Phase 1 - LinkedIn capture
+For each eligible company:
+1. Run `bash scripts/validate_linkedin_zoominfo_sop.sh` before any browser or sheet action.
+2. Set `RUN_ID=YYYYMMDD-HHMMSS`.
+3. Set `Daily Targets` status to `In Progress` with RUN_ID and timestamp.
+4. Attempt all 13 canonical terms in order unless a real blocker stops execution.
+5. For each term, stop only when one is true:
+   - 2 consecutive pages produce 0 new unique LinkedIn URLs
+   - OR 10 pages checked
+   - OR explicit no-results
+6. Dedupe against `Updated Format` column F before any append.
+7. Safe-append new contacts only after verifying the destination range is truly empty.
+8. If a LinkedIn URL already exists, update only missing/weaker fields and do not append a duplicate row.
+9. Write `J=Added` or `J=Duplicate-Skipped`, `K=Pending`, timestamp, RUN_ID, and notes as needed.
+10. If company scope/entity is ambiguous, mark `Blocked` and stop that company instead of spraying across the wrong org.
+
+## Phase 2 - ZoomInfo enrichment
+For current-run rows where `M=RUN_ID` and `K=Pending`:
+1. Locate the row by LinkedIn URL first, then verify Company Name + Full Name.
+2. Run the ZoomInfo order above without guessing.
+3. If no confident match after Advanced Search and the company IT-department fallback, mark `K=Not Found`.
+4. If a confident match lacks one field, write `No email` or `No phone` as appropriate.
+5. If no confident match exists, write `Not Found` values consistently and verify the write.
+6. Keep going until every current-run `K=Pending` row is resolved or a real blocker stops execution.
+
+Phase 2 remains incomplete while any current-run row has `K=Pending` and no real blocker exists.
+
+## Completion invariants
+A company is complete only when all are true:
+- all 13 canonical terms were attempted unless a real blocker stopped execution
+- each term reached its stop rule
+- dedupe against column F was applied
+- all new valid contacts were written safely
+- all current-run `K=Pending` rows were resolved to `Enriched` or `Not Found`
+- `Daily Targets` was updated correctly
+- a memory summary was written
+
+## Continuation invariant
+Never ask the user for permission to continue while valid work remains.
+If unrun terms remain, paging is incomplete, or current-run `K=Pending` remains, continue autonomously.
+
+## Reporting invariant
+After each company, emit an execution ledger with evidence:
+- company
+- run_id
+- profile/session used
+- terms attempted
+- pages checked by term
+- new URLs found by term
+- duplicates skipped
+- rows touched
+- ZoomInfo enriched count
+- Not Found count
+- blocker/anomaly list
+- exact next action or exact stop reason
+
+## Workflow routing
+When a task involves LinkedIn -> Google Sheets -> ZoomInfo, always load and follow the `linkedin_zoominfo_sop` skill.
+When Phase 2 uses company-level browsing or export-backed acceleration, also follow `zoominfo_batch_enrichment_sop`.
+Do not improvise or switch methods mid-run.
+If switching between the preferred LinkedIn path and a fallback, log why.
+
+## Target Persona Context (Evolven)
+- Ideal persona: IT executives and senior operators in risk, security, audit, SRE, DevOps, infrastructure, architecture, support, observability, and AI-adjacent operations roles
+- Pain point: 90%+ of outages, incidents, and breaches trace back to config change or misconfiguration risk
+- Value prop: Evolven collects every configuration in the IT estate and reports every change

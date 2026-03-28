@@ -1,53 +1,100 @@
 # HEARTBEAT.md
+SPEC_VERSION: leadgen-canonical-v3
 
 ## Daily Lead Gen Checklist
+1. Run `bash scripts/validate_linkedin_zoominfo_sop.sh` before any live browser or Google Sheets work.
+2. If validation fails, stop and alert with the exact blocker or drift finding.
+3. Check `Daily Targets` for eligible companies or resume any company already marked `In Progress`.
+4. Execute the canonical workflow below company by company.
+5. If nothing needs attention, reply `HEARTBEAT_OK`.
 
-### Morning Check (via Cron - 6 AM daily)
-- [ ] Check for new targets in Google Sheet (look for "Daily Targets" tab or new entries)
-- [ ] OR check chat for target message from Kyle
-- [ ] If targets exist → execute pipeline following linkedin_zoominfo_sop skill + exhaustive coverage patch
-- [ ] If last run incomplete → resume from where it left off (check Daily Targets status)
-- [ ] If sheet not updated in last run → repair
+## Canonical browser-session rule
+Browser session rule: use the profile that verifiably attaches to Kyle's already logged-in Chrome session; do not assume a profile name.
 
-### Pipeline Steps (MUST FOLLOW EXHAUSTIVELY)
-1. **Validation:** Run `bash scripts/validate_linkedin_zoominfo_sop.sh` before starting
-2. **Company Loop:** For each target company:
-   - Set Daily Targets status to `In Progress` with RUN_ID and timestamp
-   - Run ALL 10 approved terms in order:
-     1. IT operations
-     2. Cloud Operations
-     3. DevOps
-     4. Infrastructure
-     5. Enterprise Architecture
-     6. Observability
-     7. Site Reliability Engineer (SRE)
-     8. Change Management
-     9. Incident management
-     10. AI
-   - For EACH term: page until 2 consecutive pages produce 0 new unique LinkedIn URLs, OR 10 pages checked
-   - Dedupe against existing LinkedIn URLs in Updated Format column F
-   - Continue until ALL 10 terms are attempted AND paging exhausted
-   - **STOP ONLY WHEN:** all terms run + paging exhausted + no new URLs emerging
-   - Mark company `Completed` only after meeting completion audit criteria
-3. **Phase 2:** ZoomInfo enrichment for all rows where K = Pending from this run
-   - Continue until ALL K = Pending rows are resolved (Enriched or Not Found)
-4. **Write run summary** to `memory/YYYY-MM-DD.md`
+## Canonical 13-term search universe
+1. IT operations
+2. SRE
+3. Cloud Operations
+4. DevOps
+5. Infrastructure
+6. Enterprise Architecture
+7. Application Support
+8. Production Support
+9. Observability
+10. Site Reliability Engineer
+11. Change Management
+12. Incident management
+13. AI
 
-### Completion Audit (MUST PASS BEFORE MARKING DONE)
-For each company, verify ALL of:
-- [ ] All 10 approved terms were attempted
-- [ ] Company filter chip verified before each search
-- [ ] Each term paged until stop condition met
-- [ ] Dedupe against column F applied
-- [ ] No reliance on row position
-- [ ] Did NOT stop just because "enough" contacts found
-- [ ] Did NOT require user nudges to continue
+10 contacts is NOT completion.
 
-### If Blocked
-- Stop and explain issue clearly
-- Set Daily Targets status to `Blocked` with reason in Notes column
-- Do NOT mark Completed prematurely
+## Company loop
+Only operate these tabs: `Daily Targets` and `Updated Format`.
+False zero != no people.
+Company ambiguity is a blocker.
+Never ask the user for permission to continue while valid work remains.
 
-### Otherwise
-- If all targets processed and completion audit passed → normal completion
-- If no targets found → HEARTBEAT_OK
+For each eligible company:
+- Set `Daily Targets` column C to `In Progress`, then write RUN_ID and timestamp.
+- Preferred: verified LinkedIn / Sales Navigator path if session and filters work.
+- Fallback A: standard LinkedIn company people path with verified company context.
+- Fallback B: company-page / associated-members browsing when people-search returns false zero or is anti-automation blocked.
+- Always verify company context before every search.
+- Always open the full profile for every kept contact.
+- Attempt all 13 canonical terms in order unless a real blocker stops execution.
+- For each term, stop only when one is true:
+  - 2 consecutive pages produce 0 new unique LinkedIn URLs
+  - OR 10 pages checked
+  - OR explicit no-results
+- Dedupe against `Updated Format` column F before any append.
+- Verify destination row/range before append/update.
+- Never overwrite verified data with weaker data.
+- Post-write verification: re-locate the row by LinkedIn URL and confirm written values match.
+
+## ZoomInfo loop
+1. Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
+2. Fallback: company page -> Employees -> Information Technology department.
+3. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+
+Locate writeback rows by LinkedIn URL first, then verify Company Name + Full Name.
+Never write ZoomInfo data by row number alone.
+Phase 2 remains incomplete while any current-run row has `K=Pending` and no real blocker exists.
+
+## Status invariants
+### `Daily Targets` column C allowed values
+- Pending
+- In Progress
+- Completed
+- Blocked
+- Skipped
+
+### `Updated Format` column J allowed values
+- Added
+- Duplicate-Skipped
+- Blocked
+
+### `Updated Format` column K allowed values
+- Pending
+- Enriched
+- Not Found
+- Blocked
+
+## Completion audit
+A company is complete only when all are true:
+- all 13 canonical terms were attempted unless a real blocker stopped execution
+- each term reached its stop rule
+- dedupe against column F was applied
+- all new valid contacts were written safely
+- all current-run `K=Pending` rows were resolved to `Enriched` or `Not Found`
+- `Daily Targets` was updated correctly
+- a memory summary was written
+
+## If blocked
+- Stop and explain the exact blocker.
+- Set `Daily Targets` to `Blocked` with RUN_ID, timestamp, and notes.
+- Do not mark `Completed` prematurely.
+
+## Otherwise
+- Emit an execution ledger with evidence after each company.
+- If all eligible work is complete, finish normally.
+- If there is no eligible work, reply `HEARTBEAT_OK`.

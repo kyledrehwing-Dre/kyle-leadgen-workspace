@@ -1,241 +1,91 @@
-# ZoomInfo Batch Enrichment SOP (Phase 2)
-
-## Purpose
-This SOP covers Phase 2 of the lead generation workflow: enriching contact records in Google Sheets with ZoomInfo data (email, phone) using a batch search approach.
-
-**Recommended Method: Option 2** - Search ZoomInfo by company + job titles, export batch, then update Google Sheet.
-
-## When to Use This SOP
-- Phase 1 (LinkedIn) is complete for a company
-- Google Sheet `Updated Format` tab has contacts with `Pending` in column K (ZoomInfo Phase Status)
-- You need to enrich email and mobile phone number fields
-
-## Prerequisites
-- [ ] Target company marked "In Progress" in Daily Targets
-- [ ] LinkedIn Phase complete (column J = "Added")
-- [ ] ZoomInfo account with credits
-- [ ] Browser with ZoomInfo access (logged in)
-
-## Run Identity
-Create `RUN_ID = YYYYMMDD-HHMMSS` at start of each enrichment session.
-
+---
+name: zoominfo_batch_enrichment_sop
+description: Deterministic Phase 2 ZoomInfo enrichment accelerator for current-run Google Sheets rows, using Advanced Search, company IT-department fallback, and optional export-backed matching without row-number writes or guessing. Use only after the primary linkedin_zoominfo_sop validation passes and when company-level browsing or batch acceleration can preserve exact row identity.
 ---
 
-## Step 1: Identify Rows Needing Enrichment
+# ZoomInfo Batch Enrichment SOP (Phase 2 Accelerator)
+SPEC_VERSION: leadgen-canonical-v3
 
-1. Open Google Sheet
-2. Go to `Updated Format` tab
-3. Filter/search for:
-   - Column A = target company
-   - Column K = "Pending" (or empty)
+## Scope
+This skill accelerates Phase 2 only.
+It does not replace the primary workflow.
+It may speed up enrichment, but it may never weaken row identity, status rules, or completion rules.
 
-4. Extract the list of names to enrich:
-   - Full Name (column B)
-   - Job Title (column E)
-   - Company Name (column A)
-   - LinkedIn URL (column F) - for matching later
+## Browser session rule
+Browser session rule: use the profile that verifiably attaches to Kyle's already logged-in Chrome session; do not assume a profile name.
 
-**Example extraction (save to temp file for reference):**
-```
-Row | Name | Title | LinkedIn URL
-1458 | Sairam Peddineni | SRE | https://linkedin.com/in/...
-1459 | Abbas Husain | DevOps | https://linkedin.com/in/...
-```
+## Inherited company-complete rule
+Do not mark a company complete until the primary workflow has attempted the canonical 13-term search universe:
+1. IT operations
+2. SRE
+3. Cloud Operations
+4. DevOps
+5. Infrastructure
+6. Enterprise Architecture
+7. Application Support
+8. Production Support
+9. Observability
+10. Site Reliability Engineer
+11. Change Management
+12. Incident management
+13. AI
 
----
+## Phase 2 invariants
+Only operate these tabs: `Daily Targets` and `Updated Format`.
+Dedupe key = LinkedIn URL.
+Locate writeback rows by LinkedIn URL first, then verify Company Name + Full Name.
+Never write ZoomInfo data by row number alone.
+Never assume end-of-sheet is empty.
+Verify destination row/range before append/update.
+Never overwrite verified data with weaker data.
+Never delete data.
+Post-write verification: re-locate the row by LinkedIn URL and confirm written values match.
+Never ask the user for permission to continue while valid work remains.
+Phase 2 remains incomplete while any current-run row has `K=Pending` and no real blocker exists.
 
-## Step 2: Batch Search in ZoomInfo
+## Explicit status values
+### `Daily Targets` column C allowed values
+- Pending
+- In Progress
+- Completed
+- Blocked
+- Skipped
 
-### Method A: Company + Title Search (Recommended)
+### `Updated Format` column J allowed values
+- Added
+- Duplicate-Skipped
+- Blocked
 
-1. Open ZoomInfo: https://app.zoominfo.com/people-search
-2. Click "Clear All" filters
-3. Set Company filter = target company (e.g., "Intercontinental Exchange")
-4. Set Title/Keyword filter = relevant title term
-5. Click Search
+### `Updated Format` column K allowed values
+- Pending
+- Enriched
+- Not Found
+- Blocked
 
-**Search order by efficiency:**
-1. Run one company search with multiple title keywords
-2. Export results to CSV
+## Search order
+1. Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
+2. Fallback: company page -> Employees -> Information Technology department.
+3. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
-### Method B: Name List Upload (If Available)
+## Recommended execution pattern
+1. Run `bash scripts/validate_linkedin_zoominfo_sop.sh` first.
+2. Default scope = current-run rows where `M=RUN_ID` and `K=Pending`.
+3. For each row, locate it by LinkedIn URL first, then verify Company Name + Full Name.
+4. Try Advanced Search first.
+5. If Advanced Search misses a contact that should still be in scope, use company page -> Employees -> Information Technology department.
+6. If export/bulk is available, use it only when every exported record can be mapped back deterministically before writeback.
+7. If a match is ambiguous, do not guess. Mark `K=Blocked`, note the ambiguity, and report it.
+8. If no confident match exists after primary search and fallback, mark `K=Not Found`.
+9. After every write, run post-write verification.
 
-Some ZoomInfo tiers support bulk upload:
-1. Look for "Bulk" or "Enrich" in ZoomInfo menu
-2. Upload list of names + companies
-3. Wait for processing
-4. Download enriched results
-
----
-
-## Step 3: Process Export Results
-
-When you get a ZoomInfo export (CSV/Excel), it typically contains:
-- Name
-- Email
-- Phone
-- Direct Dial
-- Company
-- Title
-- Location
-
-**Matching Logic (Critical):**
-
-Match ZoomInfo results to Sheet rows using:
-1. **Primary:** Full Name (exact or close match) + Company Name (exact)
-2. **Secondary:** Company + Job Title similarity
-3. **Tertiary:** LinkedIn URL if available in export
-
-**Match Priority:**
-```
-IF exact name + exact company = CONFIDENT MATCH
-ELSE IF close name + exact company = VERIFY (check title/location)
-ELSE = NO MATCH
-```
-
----
-
-## Step 4: Write-Back to Google Sheet
-
-**CRITICAL: Never write by row number alone. Locate by LinkedIn URL first.**
-
-### For Each Matched Contact:
-
-1. **Find the row:**
-   - In `Updated Format`, search column F for LinkedIn URL
-   - OR search columns A+B for Company + Full Name
-   
-2. **Verify before writing:**
-   - Confirm Company Name matches (column A)
-   - Confirm Full Name matches (column B)
-   - Only then write data
-
-3. **Write these columns:**
-   - Column H (Email): `{email from ZoomInfo}` or "No Email"
-   - Column I (Mobile): `{phone from ZoomInfo}` or "No Phone"
-   - Column K (ZoomInfo Phase Status): "Enriched"
-   - Column L (Last Updated At): Current timestamp
-   - Column M (Run ID): RUN_ID
-
-### For Non-Matches:
-
-1. **Find the row** by LinkedIn URL
-2. Write:
-   - Column H: "Not Found"
-   - Column I: "Not Found"
-   - Column K: "Not Found"
-   - Column L: Current timestamp
-   - Column M: RUN_ID
-
-### For Ambiguous Matches:
-
-If multiple ZoomInfo results could match one person:
-1. Do NOT guess
-2. Write "Ambiguous" in column N (Notes)
-3. Set K = "Blocked"
-4. Report to user for manual resolution
-
----
-
-## Step 5: Post-Write Verification
-
-After writing each contact:
-1. Re-locate the row by LinkedIn URL
-2. Verify columns H, I, K contain expected values
-3. If mismatch, correct immediately
-
----
-
-## Step 6: Complete Company
-
-When all rows for company are enriched (K ≠ "Pending"):
-
-1. Update `Daily Targets`:
-   - Column C (Target Status): "Completed"
-   - Column D (Run ID): RUN_ID
-   - Column E (Last Updated At): timestamp
-   - Column F (Notes): "Phase 2 complete - X enriched, Y not found"
-
----
-
-## Error Handling
-
-**STOP and REPORT if:**
-- ZoomInfo not logged in
-- Credits exhausted
-- Export fails repeatedly
-- Cannot locate destination row by LinkedIn URL
-- 3 consecutive mismatches
-
-**Do NOT:**
-- Guess email/phone data
-- Write to wrong row
-- Skip verification step
-
----
-
-## Completion Criteria
-
-Phase 2 is complete when:
-- [ ] All rows for company have K ≠ "Pending"
-- [ ] Each row has H (Email) populated or marked appropriately
-- [ ] Each row has I (Mobile) populated or marked appropriately
-- [ ] Company marked "Completed" in Daily Targets
-- [ ] Run summary written
-
----
-
-## Run Summary Template
-
-```
-RUN_ID: 20260317-101500
-Company: Intercontinental Exchange
-Phase: 2 (ZoomInfo Enrichment)
-
-Contacts Processed: 53
-- Enriched: 12
-- Not Found: 41
-- Ambiguous/Blocked: 0
-
-Time Start: 10:15 AM
-Time End: 10:45 AM
-Method: Batch company search + export match
-```
-
----
-
-## Quick Reference: Column Mapping
-
-| Column | Field | Source |
-|--------|-------|--------|
-| A | Company Name | From LinkedIn |
-| B | Full Name | From LinkedIn |
-| C | Last Name | Parsed |
-| D | First Name | Parsed |
-| E | Job Title | From LinkedIn |
-| F | LinkedIn URL | From LinkedIn |
-| G | Location | From LinkedIn |
-| H | Email address | **ZoomInfo** |
-| I | Mobile phone | **ZoomInfo** |
-| J | LinkedIn Phase Status | Already set |
-| K | ZoomInfo Phase Status | **Set to Enriched/Not Found** |
-| L | Last Updated At | Timestamp |
-| M | Run ID | RUN_ID |
-| N | Notes | If blocked/ambiguous |
-
----
-
-## Alternative: Option 1 (Individual Extension Method)
-
-If Option 2 not available, use this fallback:
-
-1. Open Google Sheet
-2. Click LinkedIn URL in column F → Opens LinkedIn profile
-3. Look for ZoomInfo extension icon in browser toolbar
-4. Click extension → Opens ZoomInfo record (if found)
-5. Copy email/phone
-6. Manually paste to columns H/I
-7. Set K = "Enriched"
-8. Repeat for each row
-
-**Warning:** This is ~30 seconds per contact. Use only when batch method unavailable.
+## Reporting
+For each company or batch slice, report:
+- company
+- run_id
+- browser profile/session used
+- rows considered
+- rows enriched
+- rows marked `Not Found`
+- rows marked `Blocked`
+- export/batch method used or not used
+- exact next action or exact stop reason

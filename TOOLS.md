@@ -1,29 +1,52 @@
 # TOOLS.md - Tools & Methods
+SPEC_VERSION: leadgen-canonical-v3
 
 ## Browser Automation
 - **Tool:** `browser` (OpenClaw browser control)
-- **Use for:** LinkedIn People search, ZoomInfo search
-- **Profile:** Use Kyle's existing Chrome session (profile="chrome")
+- **Use for:** LinkedIn, Sales Navigator, ZoomInfo
+Browser session rule: use the profile that verifiably attaches to Kyle's already logged-in Chrome session; do not assume a profile name.
+- **Verification sequence:** confirm the attached session is already logged into LinkedIn, then confirm ZoomInfo login, then record the actual profile/session used in the execution ledger.
+- **Preferred LinkedIn path:** verified LinkedIn / Sales Navigator path if session and filters work.
+- **Fallback A:** standard LinkedIn company people path with verified company context.
+- **Fallback B:** company-page / associated-members browsing when people-search returns false zero or is anti-automation blocked.
+- **Rule:** False zero != no people.
+- **Rule:** Company ambiguity is a blocker.
+- **Rule:** Always open the full profile for every kept contact.
+- **Rule:** Do not switch methods silently; log the exact reason when falling back.
 
 ## gog (Google Sheets)
-- **Tool:** `exec` → `gog` CLI
+- **Tool:** `exec` -> `gog` CLI
 - **Auth:** Already configured for Kyle.Drehwing@gmail.com
 - **Commands:**
+  - `gog sheets metadata <id>` - verify tabs
   - `gog sheets get <id> "Range" --json` - read
-  - `gog sheets update <id> "Range" --values-json '...'` - write
-  - `gog sheets append <id> "Range" --values-json '...'` - add rows
-  - `gog sheets metadata <id>` - get sheet tabs
+  - `gog sheets update <id> "Range" --values-json '...'` - targeted write
+  - `gog sheets append <id> "Range" --values-json '...'` - append after verification
 
-### Finding the Correct Row (BEFORE writing)
-1. Query last row: `gog sheets get <id> "'Updated Format'!A:A" --json | grep -c "Company"` or iterate to find last non-empty
-2. Check existing: `gog sheets get <id> "'Updated Format'!F:F" --json | grep -c "linkedin.com/in/username"`
-3. Verify empty: Read destination range BEFORE writing to confirm blank
-4. NEVER assume high-numbered rows (3000+) are empty - they may contain data
+## Sheet invariants
+- Only operate these tabs: `Daily Targets` and `Updated Format`.
+- Datastore = Google Sheets only.
+- Dedupe key = LinkedIn URL.
+- Locate writeback rows by LinkedIn URL first, then verify Company Name + Full Name.
+- Never write ZoomInfo data by row number alone.
+- Never assume end-of-sheet is empty.
+- Verify destination row/range before append/update.
+- Never overwrite verified data with weaker data.
+- Never delete data.
+- Post-write verification: re-locate the row by LinkedIn URL and confirm written values match.
+Never ask the user for permission to continue while valid work remains.
+Phase 2 remains incomplete while any current-run row has `K=Pending` and no real blocker exists.
 
-## Data Merge
-- **Tool:** Internal code/parsing
-- **Process:** Merge LinkedIn + ZoomInfo fields, calculate quality_score
+## Status invariants
+- `Daily Targets` column C: Pending | In Progress | Completed | Blocked | Skipped
+- `Updated Format` column J: Added | Duplicate-Skipped | Blocked
+- `Updated Format` column K: Pending | Enriched | Not Found | Blocked
+
+## ZoomInfo method
+- Primary: Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
+- Fallback: company page -> Employees -> Information Technology department.
+- Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
 ## Memory
-- **Tool:** Write to `memory/YYYY-MM-DD.md`
-- **Content:** Run summaries, blockers, what's next
+- **Tool:** write to `memory/YYYY-MM-DD.md`
+- **Content:** run summaries, blockers, repair notes, exact next action or stop reason
