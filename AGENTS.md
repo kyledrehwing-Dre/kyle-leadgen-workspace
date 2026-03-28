@@ -16,7 +16,26 @@
 - Title list (always use these): IT operations, SRE, Cloud Operations, DevOps, Infrastructure, Enterprise Architecture, Application Support, Production Support, Observability, Site Reliability Engineer, Change Management, Incident management, AI
 - **ALWAYS open FULL profile** to capture: Name, Title, Company, Location, LinkedIn URL, Headline, Summary, Experience, Education
 - Collect all available fields from profile
+- **NEVER ask "should I continue"** - Continue autonomously until all 10 terms are exhausted AND paging stops yielding new results
 - **Blocker response:** Stop, explain, ask Kyle
+
+### ⚠️ MANDATORY COVERAGE (NEVER SKIP)
+**For each company, you MUST run ALL 10 terms:**
+1. IT operations
+2. Cloud Operations
+3. DevOps
+4. Infrastructure
+5. Enterprise Architecture
+6. Observability
+7. Site Reliability Engineer (SRE)
+8. Change Management
+9. Incident management
+10. AI
+
+**Completion = ALL 10 terms attempted + paging exhausted.**
+- 10 contacts is NOT completion
+- "Enough contacts found" is NOT completion
+- You must mark company done only after all 10 terms searched with proper paging (2 consecutive empty pages OR 10 pages)
 
 ### Match (ZoomInfo)
 - Search ZoomInfo by name + company
@@ -40,9 +59,35 @@
 ### Dedupe Rule
 - LinkedIn URL is unique key
 
+### Row Finding Safety Rules (CRITICAL)
+Before adding ANY new contacts to Updated Format, ALWAYS follow these steps:
+
+1. **Find last row with data FIRST**
+   - Query column A (Company Name) to find the last non-empty row
+   - Do NOT assume the sheet ends at a specific row number
+   - The sheet may have data at high row numbers (e.g., row 3210+)
+
+2. **Check for existing company contacts**
+   - Before adding, search column F (LinkedIn URL) for any existing contacts from the same company
+   - If company already has contacts, append after the last one for that company
+
+3. **Verify destination row is empty**
+   - Read the destination range BEFORE writing to confirm it's truly empty
+   - Check all columns (A through N) are blank
+
+4. **Never assume end of sheet is empty**
+   - Rows beyond 3000 may contain data from previous runs
+   - Always query to find actual last row
+
+5. **Validate before write**
+   - Confirm row number is sequential to last existing data
+   - Verify Company Name and LinkedIn URL columns are blank
+
+If destination row cannot be verified as empty, STOP and report to Kyle instead of guessing.
+
 ### Done Definition
 A company is Completed ONLY when ALL of:
-- [ ] All 13 approved terms were attempted for the company
+- [ ] All 10 approved terms were attempted for the company
 - [ ] Each term was paged until stop condition met (2 consecutive pages with 0 new URLs, OR 10 pages)
 - [ ] All discovered people were deduplicated by LinkedIn URL
 - [ ] All new valid people were appended to Updated Format with correct status
@@ -69,7 +114,7 @@ When a task involves LinkedIn -> Google Sheet -> ZoomInfo enrichment, always loa
 **IMPORTANT:** Also load and follow the EXHAUSTIVE COVERAGE PATCH embedded in the skill (Sections 0-14). This patch enforces:
 - 10 contacts is NOT completion
 - Loop execution (not one-shot pass)
-- Mandatory term-by-term completion (all 13 terms)
+- Mandatory term-by-term completion (all 10 terms)
 - Strict paging rules
 - Coverage-gap assessment
 - Autonomous continuation (no user nudges)

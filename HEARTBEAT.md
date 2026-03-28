@@ -13,23 +13,20 @@
 1. **Validation:** Run `bash scripts/validate_linkedin_zoominfo_sop.sh` before starting
 2. **Company Loop:** For each target company:
    - Set Daily Targets status to `In Progress` with RUN_ID and timestamp
-   - Run ALL 13 approved terms in order:
+   - Run ALL 10 approved terms in order:
      1. IT operations
-     2. SRE
-     3. Cloud Operations
-     4. DevOps
-     5. Infrastructure
-     6. Enterprise Architecture
-     7. Application Support
-     8. Production Support
-     9. Observability
-     10. Site Reliability Engineer
-     11. Change Management
-     12. Incident management
-     13. AI
+     2. Cloud Operations
+     3. DevOps
+     4. Infrastructure
+     5. Enterprise Architecture
+     6. Observability
+     7. Site Reliability Engineer (SRE)
+     8. Change Management
+     9. Incident management
+     10. AI
    - For EACH term: page until 2 consecutive pages produce 0 new unique LinkedIn URLs, OR 10 pages checked
    - Dedupe against existing LinkedIn URLs in Updated Format column F
-   - Continue until ALL 13 terms are attempted AND paging exhausted
+   - Continue until ALL 10 terms are attempted AND paging exhausted
    - **STOP ONLY WHEN:** all terms run + paging exhausted + no new URLs emerging
    - Mark company `Completed` only after meeting completion audit criteria
 3. **Phase 2:** ZoomInfo enrichment for all rows where K = Pending from this run
@@ -38,7 +35,7 @@
 
 ### Completion Audit (MUST PASS BEFORE MARKING DONE)
 For each company, verify ALL of:
-- [ ] All 13 approved terms were attempted
+- [ ] All 10 approved terms were attempted
 - [ ] Company filter chip verified before each search
 - [ ] Each term paged until stop condition met
 - [ ] Dedupe against column F applied
