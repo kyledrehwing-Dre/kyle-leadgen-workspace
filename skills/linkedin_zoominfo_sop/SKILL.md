@@ -16,7 +16,7 @@ SPEC_VERSION: leadgen-canonical-v3
 - 10 contacts is NOT completion.
 
 ## Browser session rule
-Browser session rule: use the profile that verifiably attaches to Kyle's already logged-in Chrome session; do not assume a profile name.
+Browser session rule: try to attach to Kyle's existing logged-in Chrome session if available; otherwise spawn a dedicated agent-owned browser session/profile. Once a session is verified for the run, use that same verified session consistently for the run. Do not assume a profile name without verification.
 
 ## Scope and tabs
 Only operate these tabs: `Daily Targets` and `Updated Format`.

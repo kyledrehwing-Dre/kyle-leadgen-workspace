@@ -4,7 +4,7 @@ SPEC_VERSION: leadgen-canonical-v3
 ## Browser Automation
 - **Tool:** `browser` (OpenClaw browser control)
 - **Use for:** LinkedIn, Sales Navigator, ZoomInfo
-Browser session rule: use the profile that verifiably attaches to Kyle's already logged-in Chrome session; do not assume a profile name.
+Browser session rule: try to attach to Kyle's existing logged-in Chrome session if available; otherwise spawn a dedicated agent-owned browser session/profile. Once a session is verified for the run, use that same verified session consistently for the run. Do not assume a profile name without verification.
 - **Verification sequence:** confirm the attached session is already logged into LinkedIn, then confirm ZoomInfo login, then record the actual profile/session used in the execution ledger.
 - **Preferred LinkedIn path:** verified LinkedIn / Sales Navigator path if session and filters work.
 - **Fallback A:** standard LinkedIn company people path with verified company context.

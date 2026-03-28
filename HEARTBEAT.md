@@ -9,7 +9,7 @@ SPEC_VERSION: leadgen-canonical-v3
 5. If nothing needs attention, reply `HEARTBEAT_OK`.
 
 ## Canonical browser-session rule
-Browser session rule: use the profile that verifiably attaches to Kyle's already logged-in Chrome session; do not assume a profile name.
+Browser session rule: try to attach to Kyle's existing logged-in Chrome session if available; otherwise spawn a dedicated agent-owned browser session/profile. Once a session is verified for the run, use that same verified session consistently for the run. Do not assume a profile name without verification.
 
 ## Canonical 13-term search universe
 1. IT operations

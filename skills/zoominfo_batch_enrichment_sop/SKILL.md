@@ -12,7 +12,7 @@ It does not replace the primary workflow.
 It may speed up enrichment, but it may never weaken row identity, status rules, or completion rules.
 
 ## Browser session rule
-Browser session rule: use the profile that verifiably attaches to Kyle's already logged-in Chrome session; do not assume a profile name.
+Browser session rule: try to attach to Kyle's existing logged-in Chrome session if available; otherwise spawn a dedicated agent-owned browser session/profile. Once a session is verified for the run, use that same verified session consistently for the run. Do not assume a profile name without verification.
 
 ## Inherited company-complete rule
 Do not mark a company complete until the primary workflow has attempted the canonical 13-term search universe:

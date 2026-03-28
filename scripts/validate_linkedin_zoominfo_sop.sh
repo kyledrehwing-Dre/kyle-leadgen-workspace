@@ -105,7 +105,7 @@ CANONICAL_TERMS=$'1. IT operations
 11. Change Management
 12. Incident management
 13. AI'
-BROWSER_RULE="Browser session rule: use the profile that verifiably attaches to Kyle's already logged-in Chrome session; do not assume a profile name."
+BROWSER_RULE="Browser session rule: try to attach to Kyle's existing logged-in Chrome session if available; otherwise spawn a dedicated agent-owned browser session/profile. Once a session is verified for the run, use that same verified session consistently for the run. Do not assume a profile name without verification."
 TAB_RULE=$'Only operate these tabs: `Daily Targets` and `Updated Format`.'
 DEDUPE_RULE=$'Dedupe key = LinkedIn URL.'
 ROW_RULE=$'Locate writeback rows by LinkedIn URL first, then verify Company Name + Full Name.'
@@ -138,6 +138,18 @@ done
 
 for file in AGENTS.md HEARTBEAT.md USER.md SOUL.md TOOLS.md skills/linkedin_zoominfo_sop/SKILL.md skills/zoominfo_batch_enrichment_sop/SKILL.md; do
   require_fixed "$file" "$BROWSER_RULE" "$file agrees on browser-session rule"
+done
+
+EXISTING_SESSION_RULE=$'existing logged-in Chrome session if available'
+DEDICATED_SESSION_RULE=$'dedicated agent-owned browser session/profile'
+SAME_SESSION_RULE=$'use that same verified session consistently for the run'
+NO_ASSUME_RULE=$'Do not assume a profile name without verification.'
+
+for file in AGENTS.md HEARTBEAT.md USER.md SOUL.md TOOLS.md skills/linkedin_zoominfo_sop/SKILL.md skills/zoominfo_batch_enrichment_sop/SKILL.md; do
+  require_fixed "$file" "$EXISTING_SESSION_RULE" "$file requires existing-session attach when available"
+  require_fixed "$file" "$DEDICATED_SESSION_RULE" "$file defines dedicated agent-owned browser fallback"
+  require_fixed "$file" "$SAME_SESSION_RULE" "$file requires same verified session for the run"
+  require_fixed "$file" "$NO_ASSUME_RULE" "$file forbids profile-name assumptions without verification"
 done
 
 for file in AGENTS.md HEARTBEAT.md USER.md TOOLS.md skills/linkedin_zoominfo_sop/SKILL.md skills/zoominfo_batch_enrichment_sop/SKILL.md; do
