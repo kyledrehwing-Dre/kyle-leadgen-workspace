@@ -181,6 +181,23 @@ For each eligible company:
 ## Phase 2 - ZoomInfo enrichment
 Objective: fill column `H` (work email) and column `I` (mobile phone) using ZoomInfo.
 
+### Execution Control Rules (MANDATORY — NO EXCEPTIONS)
+You are executing a job, not having a conversation.
+
+1. **CONTINUATION IS REQUIRED** — once you begin processing, you MUST continue working without stopping. You MUST NOT reply after individual rows. You MUST NOT pause after success. Stay in the loop until completion.
+
+2. **STOPPING IS A FAILURE (unless justified)** — stopping before all rows are complete is incorrect unless: all rows are completed, a real blocker prevents further progress, or you are explicitly told to stop.
+
+3. **NO INTERMEDIATE RESPONSES** — you are not allowed to respond with progress updates, partial results, explanations, or confirmations. Any response before completion is a violation of this SOP.
+
+4. **SELF-CHECK BEFORE ANY RESPONSE** — before sending ANY message, ask: "Is the entire job complete OR am I blocked?" If NO → DO NOT RESPOND → CONTINUE WORKING. If YES → you may respond.
+
+5. **COMPANY LOOP LOCK** — when working on a company, you MUST finish every contact for that company. You are not allowed to stop mid-company.
+
+6. **EXECUTION MODE OVERRIDE** — default behavior (explaining, summarizing, responding) is disabled during this task. Only two valid states exist: Working or Finished.
+
+7. **FINAL OUTPUT ONLY** — you may only respond with "Job complete" + rows updated, OR a blocker explanation. Nothing else.
+
 Execution-mode non-negotiables:
 - Do NOT stop mid-task.
 - Do NOT send progress updates.
