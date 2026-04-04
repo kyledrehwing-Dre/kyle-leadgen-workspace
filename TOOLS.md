@@ -31,7 +31,7 @@ Browser session rule: try to attach to Kyle's existing logged-in Chrome session 
 - Before writing anything, confirm the matched ZoomInfo contact matches sheet column `B` (allowing approved nickname/full-name variants only)
 - Before every write, re-check the destination row identity; after every write, verify the exact row and values immediately
 - Final user-visible output should happen only at the end of the company/job unless blocked
-- Execution Control Rules (MANDATORY — NO EXCEPTIONS): CONTINUATION IS REQUIRED once you begin; STOPPING IS A FAILURE unless all rows done, real blocker, or told to stop; NO INTERMEDIATE RESPONSES; SELF-CHECK before any reply (is job complete or blocked? if no, continue); COMPANY LOOP LOCK (finish all contacts for a company before stopping); EXECUTION MODE OVERRIDE (only Working or Finished states); FINAL OUTPUT ONLY (Job complete + rows updated, or blocker explanation)
+- Execution Control Rules (MANDATORY — NO EXCEPTIONS): CONTINUATION IS REQUIRED once you begin; STOPPING IS A FAILURE unless all rows done, real blocker, or told to stop; NO INTERMEDIATE RESPONSES; SELF-CHECK before any reply (is job complete or blocked? if no, continue); COMPANY LOOP LOCK (finish all contacts for a company before stopping); EXECUTION MODE OVERRIDE (only Working or Finished states); FINAL OUTPUT ONLY (Job complete + rows updated, or blocker explanation); INCORPORATE-AND-CONTINUE RULE (when the user provides updated execution rules during an active job, incorporate them immediately and continue the active company/job without pausing for confirmation or row-by-row replies unless blocked)
 
 ## gog (Google Sheets)
 - **Tool:** `exec` -> `gog` CLI

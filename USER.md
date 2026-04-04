@@ -78,7 +78,7 @@ Phase 2 remains incomplete while any current-run row has `K=Pending` and no real
   - before writing, the matched ZoomInfo contact must match sheet column `B` (approved nickname/full-name variants only)
   - re-check row identity before writing and verify the exact row/values immediately after writing
   - final output should happen only after the job/company is complete or blocked
-  - Execution Control Rules (MANDATORY — NO EXCEPTIONS): CONTINUATION IS REQUIRED once you begin; STOPPING IS A FAILURE unless all rows done, real blocker, or told to stop; NO INTERMEDIATE RESPONSES; SELF-CHECK before any reply (is job complete or blocked? if no, continue); COMPANY LOOP LOCK (finish all contacts for a company before stopping); EXECUTION MODE OVERRIDE (only Working or Finished states); FINAL OUTPUT ONLY (Job complete + rows updated, or blocker explanation)
+  - Execution Control Rules (MANDATORY — NO EXCEPTIONS): CONTINUATION IS REQUIRED once you begin; STOPPING IS A FAILURE unless all rows done, real blocker, or told to stop; NO INTERMEDIATE RESPONSES; SELF-CHECK before any reply (is job complete or blocked? if no, continue); COMPANY LOOP LOCK (finish all contacts for a company before stopping); EXECUTION MODE OVERRIDE (only Working or Finished states); FINAL OUTPUT ONLY (Job complete + rows updated, or blocker explanation); INCORPORATE-AND-CONTINUE RULE (when the user provides updated execution rules during an active job, incorporate them immediately and continue the active company/job without pausing for confirmation or row-by-row replies unless blocked)
 
 ### Status Invariants
 - **Daily Targets / column C:** Pending | In Progress | Completed | Blocked | Skipped
