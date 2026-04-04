@@ -60,6 +60,19 @@ Post-write verification: re-locate the row by LinkedIn URL and confirm written v
 Never ask the user for permission to continue while valid work remains.
 Phase 2 remains incomplete while any current-run row has `K=Pending` and no real blocker exists.
 
+### Separate job definition
+- **Job 1 = LinkedIn Capture**
+  - discovery only
+  - allowed systems: LinkedIn + Google Sheets
+  - output: rows written/refreshed with `K=Pending`
+  - no ZoomInfo enrichment inside Job 1
+- **Job 2 = ZoomInfo Enrichment**
+  - enrichment only
+  - allowed systems: ZoomInfo + Google Sheets
+  - input: existing sheet rows
+  - output: `H/I/K/L/N` resolved from ZoomInfo evidence
+  - no LinkedIn discovery or new-contact appends inside Job 2
+
 ### Status Invariants
 - **Daily Targets / column C:** Pending | In Progress | Completed | Blocked | Skipped
 - **Updated Format / column J:** Added | Duplicate-Skipped | Blocked

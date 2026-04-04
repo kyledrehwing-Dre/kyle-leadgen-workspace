@@ -14,6 +14,19 @@ Browser session rule: try to attach to Kyle's existing logged-in Chrome session 
 - **Rule:** Always open the full profile for every kept contact.
 - **Rule:** Do not switch methods silently; log the exact reason when falling back.
 
+## Two separate jobs
+### Job 1 — LinkedIn capture
+- Systems allowed: LinkedIn + Google Sheets
+- Goal: discover contacts and write/refresh sheet rows
+- Output state: `K=Pending`
+- Do not do ZoomInfo enrichment here
+
+### Job 2 — ZoomInfo enrichment
+- Systems allowed: ZoomInfo + Google Sheets
+- Goal: enrich existing sheet rows only
+- Input state: existing rows, preferably `K=Pending`
+- Do not do LinkedIn discovery or append brand-new contacts here
+
 ## gog (Google Sheets)
 - **Tool:** `exec` -> `gog` CLI
 - **Auth:** Already configured for Kyle.Drehwing@gmail.com

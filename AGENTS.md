@@ -2,7 +2,32 @@
 SPEC_VERSION: leadgen-canonical-v3
 
 ## Core Pipeline
-Validate -> Verify browser/session -> Select eligible targets -> Phase 1 LinkedIn capture -> Phase 2 ZoomInfo enrichment -> Safe Google Sheets upsert -> Memory log -> Resume
+Validate -> Verify browser/session -> Select eligible targets -> Job 1 LinkedIn capture -> Handoff rows with `K=Pending` -> Job 2 ZoomInfo enrichment -> Memory log -> Resume
+
+## Two-job operating model
+### Job 1 — LinkedIn capture
+Purpose: discover contacts and write base rows into Google Sheets.
+- Inputs: eligible companies from `Daily Targets`
+- Systems allowed: LinkedIn + Google Sheets
+- Outputs: rows in `Updated Format` with profile fields populated and `K=Pending`
+- Must do: discovery, company-context verification, dedupe, append/update, post-write verification
+- Must NOT do: ZoomInfo lookup, email/phone enrichment, final `H/I` resolution
+- Exit condition: all valid discovered contacts are written and handed off as `K=Pending`
+
+### Job 2 — ZoomInfo enrichment
+Purpose: enrich existing sheet rows only.
+- Inputs: existing rows in `Updated Format`
+- Systems allowed: ZoomInfo + Google Sheets
+- Outputs: `H`, `I`, `K`, `L`, and `N` resolved from ZoomInfo evidence
+- Must do: search by sheet identity, run the ZoomInfo search ladder, write enrichment results, post-write verification
+- Must NOT do: LinkedIn people discovery, append brand-new contacts from browsing, change row identity rules
+- Exit condition: every targeted row is resolved to `K=Enriched` or `K=Not Found`
+
+## Job handoff rule
+- Job 1 creates or refreshes rows and leaves them at `K=Pending`.
+- Job 2 starts from existing sheet rows and never depends on LinkedIn search for discovery.
+- If a person is missing from the sheet, that is Job 1 work.
+- If a person is already in the sheet and needs `H/I/K` resolution, that is Job 2 work.
 
 ## Canonical browser-session rule
 Browser session rule: try to attach to Kyle's existing logged-in Chrome session if available; otherwise spawn a dedicated agent-owned browser session/profile. Once a session is verified for the run, use that same verified session consistently for the run. Do not assume a profile name without verification.
@@ -104,23 +129,26 @@ For each eligible company:
 8. If a LinkedIn URL already exists, update only missing/weaker fields and do not append a duplicate row.
 9. Write `J=Added` or `J=Duplicate-Skipped`, `K=Pending`, timestamp, RUN_ID, and notes as needed.
 10. If company scope/entity is ambiguous, mark `Blocked` and stop that company instead of spraying across the wrong org.
+11. Stop Job 1 after the sheet handoff is complete. Do not perform ZoomInfo enrichment inside Job 1.
 
 ## Phase 2 - ZoomInfo enrichment
 For current-run rows where `M=RUN_ID` and `K=Pending`:
-1. Locate the row by LinkedIn URL first, then verify Company Name + Full Name.
-2. Run the ZoomInfo order above without guessing.
-3. If the first ZoomInfo search misses, complete the full name-variant ladder before treating the row as a miss.
-4. If a confident match exists, set `K=Enriched` and write:
+1. Start from existing sheet rows only. Do not use LinkedIn for discovery in Job 2.
+2. Locate the row by LinkedIn URL first, then verify Company Name + Full Name.
+3. Run the ZoomInfo order above without guessing.
+4. If the first ZoomInfo search misses, complete the full name-variant ladder before treating the row as a miss.
+5. If a confident match exists, set `K=Enriched` and write:
    - `H=<business email (B)>` or exactly `No Email`
    - `I=<mobile (M)>` or exactly `No Phone`
-5. If no confident match exists after the full search ladder and the company IT-department fallback, set:
+6. If no confident match exists after the full search ladder and the company IT-department fallback, set:
    - `K=Not Found`
    - `H=Not Found`
    - `I=Not Found`
-6. Before finalizing a company, recheck every provisional `Not Found` row once with broader name variants.
-7. Keep going until every current-run `K=Pending` row is resolved or a real blocker stops execution.
+7. Before finalizing a company, recheck every provisional `Not Found` row once with broader name variants.
+8. Never append a brand-new person during Job 2. Missing people belong to Job 1.
+9. Keep going until every targeted `K=Pending` row is resolved or a real blocker stops execution.
 
-Phase 2 remains incomplete while any current-run row has `K=Pending` and no real blocker exists.
+Phase 2 remains incomplete while any targeted row has `K=Pending` and no real blocker exists.
 
 ## Completion invariants
 A company is complete only when all are true:

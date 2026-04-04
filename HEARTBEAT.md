@@ -28,13 +28,27 @@ Browser session rule: try to attach to Kyle's existing logged-in Chrome session 
 
 10 contacts is NOT completion.
 
+## Separate jobs
+### Job 1 — LinkedIn capture
+- discovery only
+- allowed systems: LinkedIn + Google Sheets
+- output: rows written/refreshed with `K=Pending`
+- stop Job 1 after handoff to the sheet; do not do ZoomInfo enrichment inside Job 1
+
+### Job 2 — ZoomInfo enrichment
+- enrichment only
+- allowed systems: ZoomInfo + Google Sheets
+- input: existing sheet rows, preferably `K=Pending`
+- do not use LinkedIn for discovery inside Job 2
+- do not append brand-new people during Job 2
+
 ## Company loop
 Only operate these tabs: `Daily Targets` and `Updated Format`.
 False zero != no people.
 Company ambiguity is a blocker.
 Never ask the user for permission to continue while valid work remains.
 
-For each eligible company:
+For each eligible company when running Job 1:
 - Set `Daily Targets` column C to `In Progress`, then write RUN_ID and timestamp.
 - Preferred: verified LinkedIn / Sales Navigator path if session and filters work.
 - Fallback A: standard LinkedIn company people path with verified company context.
@@ -52,21 +66,23 @@ For each eligible company:
 - Post-write verification: re-locate the row by LinkedIn URL and confirm written values match.
 
 ## ZoomInfo loop
-1. Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
-2. If the first search misses, run the required name-variant ladder before declaring `Not Found`:
+For each targeted row when running Job 2:
+1. Start from the sheet row only; do not use LinkedIn discovery here.
+2. Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
+3. If the first search misses, run the required name-variant ladder before declaring `Not Found`:
    - exact full name + company
    - nickname/full-first-name swap
    - without middle initial
    - with middle initial / punctuation variant
-3. Fallback: company page -> Employees -> Information Technology department.
-4. If a confident match exists, write `K=Enriched`, `H=(B) or No Email`, and `I=(M) or No Phone`.
-5. If no confident match exists after the full ladder + fallback, write `K=Not Found`, `H=Not Found`, and `I=Not Found`.
-6. Never use HQ `(HQ)` or direct `(D)` phone in place of mobile `(M)` for column `I`.
-7. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+4. Fallback: company page -> Employees -> Information Technology department.
+5. If a confident match exists, write `K=Enriched`, `H=(B) or No Email`, and `I=(M) or No Phone`.
+6. If no confident match exists after the full ladder + fallback, write `K=Not Found`, `H=Not Found`, and `I=Not Found`.
+7. Never use HQ `(HQ)` or direct `(D)` phone in place of mobile `(M)` for column `I`.
+8. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
 Locate writeback rows by LinkedIn URL first, then verify Company Name + Full Name.
 Never write ZoomInfo data by row number alone.
-Phase 2 remains incomplete while any current-run row has `K=Pending` and no real blocker exists.
+Phase 2 remains incomplete while any targeted row has `K=Pending` and no real blocker exists.
 
 ## Status invariants
 ### `Daily Targets` column C allowed values
