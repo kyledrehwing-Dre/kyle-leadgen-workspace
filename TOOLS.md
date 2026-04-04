@@ -66,6 +66,7 @@ Phase 2 remains incomplete while any current-run row has `K=Pending` and no real
 - Write rule on confident match: `K=Enriched`, `H=(B) or No Email`, `I=(M) or No Phone`.
 - Write rule on no confident match after ladder + fallback: `K=Not Found`, `H=Not Found`, `I=Not Found`.
 - Never use HQ `(HQ)` or direct `(D)` phone in place of mobile `(M)` for column `I`.
+- Before writing `Not Found`, open any obvious ZoomInfo candidate that matches full name + company context. Do not declare `Not Found` while an obvious unopened candidate remains in results.
 - Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
 ### ZoomInfo Contact Profile extraction — mobile-first verification

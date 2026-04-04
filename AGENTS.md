@@ -82,6 +82,7 @@ Batch convenience must never weaken row-identity rules.
   - write column `H` exactly `Not Found`
   - write column `I` exactly `Not Found`
 - Never use HQ `(HQ)` or direct `(D)` phone as a substitute for mobile `(M)` in column `I`.
+- Before writing `Not Found`, open any obvious ZoomInfo candidate that matches full name + company context. Do not declare `Not Found` while an obvious unopened candidate remains in results.
 
 ### ZoomInfo Contact Profile extraction — mobile-first verification
 ZoomInfo innerText returns phone/email values on one line and their `(B)`, `(M)`, `(D)`, `(HQ)` labels on the next line. The `\n` IS present between the value and label.

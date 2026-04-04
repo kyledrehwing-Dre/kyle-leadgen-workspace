@@ -99,6 +99,17 @@ txt.match(/([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})\s*\n\(B\)/i)
 ### Rejection rule for wrong-person matches
 If ZoomInfo returns a contact whose name does not match the sheet Full Name (ignoring middle initials and nicknames), reject the match entirely. Do not use that email or phone. Mark `K=Not Found` instead.
 
+### Mandatory obvious-result rule — open it before `Not Found`
+If ZoomInfo search shows an obvious candidate that matches the sheet person and company context, open that contact profile before declaring `Not Found`.
+
+Rules:
+- If an exact full-name result appears for the target company, open it.
+- If the title is strongly aligned and the company matches, open it.
+- Do not declare `Not Found` while an obvious unopened candidate remains in search results.
+- `Not Found` is allowed only after the best visible candidate has been opened and checked, or after the full search ladder and fallback produce no viable candidate.
+
+This prevents false negatives like row 308, where the contact existed in plain view but was not opened deeply enough before writing `Not Found`.
+
 ### Write rules
 - `K=Enriched`: confident match found
   - `H = (B) email` or exactly `No Email`
