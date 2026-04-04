@@ -61,14 +61,16 @@ Always open the full profile for every kept contact.
 Do not switch methods silently; log the exact reason when falling back.
 
 ## ZoomInfo enrichment order
-1. Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
-2. If the first search misses, run the required name-variant ladder before declaring `Not Found`:
+1. Advanced Search -> Clear All -> Contact Name or Email -> Company Name -> widen confidence to All contacts / 50-100 before declaring Not Found.
+2. Anti-improvisation rule: do NOT use Quick Search, free browsing, or open profile/result cards before the canonical Advanced Search field sequence is completed. When company context is known, Company Name must be applied before evaluating candidates.
+3. Completion gate: a ZoomInfo lookup is not valid unless the execution path explicitly includes all of the following: Advanced Search used, Clear All used, Contact Name or Email field applied, Company Name field applied when company context is known, and candidate profile opened only after narrowing.
+4. If the first search misses, run the required name-variant ladder before declaring `Not Found`:
    - exact full name + company
    - nickname/full-first-name swap (for example `Doug` <-> `Douglas`)
    - without middle initial
    - with middle initial / punctuation variant
-3. Fallback: company page -> Employees -> Information Technology department.
-4. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+5. Fallback: company page -> Employees -> Information Technology department.
+6. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
 Batch convenience must never weaken row-identity rules.
 
