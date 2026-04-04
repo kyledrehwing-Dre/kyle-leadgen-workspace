@@ -23,9 +23,14 @@ Browser session rule: try to attach to Kyle's existing logged-in Chrome session 
 
 ### Job 2 — ZoomInfo enrichment
 - Systems allowed: ZoomInfo + Google Sheets
-- Goal: enrich existing sheet rows only
+- Goal: enrich existing sheet rows only by filling column `H` (work email) and column `I` (mobile phone)
 - Input state: existing rows, preferably `K=Pending`
 - Do not do LinkedIn discovery or append brand-new contacts here
+- Execution mode only: do not stop mid-task, do not send progress updates, do not switch into explanation mode
+- Continue until all targeted rows for the active company are completed or a real blocker occurs
+- Before writing anything, confirm the matched ZoomInfo contact matches sheet column `B` (allowing approved nickname/full-name variants only)
+- Before every write, re-check the destination row identity; after every write, verify the exact row and values immediately
+- Final user-visible output should happen only at the end of the company/job unless blocked
 
 ## gog (Google Sheets)
 - **Tool:** `exec` -> `gog` CLI

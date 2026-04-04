@@ -179,21 +179,35 @@ For each eligible company:
 11. Stop Job 1 after the sheet handoff is complete. Do not perform ZoomInfo enrichment inside Job 1.
 
 ## Phase 2 - ZoomInfo enrichment
+Objective: fill column `H` (work email) and column `I` (mobile phone) using ZoomInfo.
+
+Execution-mode non-negotiables:
+- Do NOT stop mid-task.
+- Do NOT send progress updates.
+- Do NOT switch into explanation mode.
+- Work continuously until all targeted rows are done or a real blocker occurs.
+- Once you start a company, finish ALL targeted contacts for that company before moving on.
+
 For current-run rows where `M=RUN_ID` and `K=Pending`:
 1. Start from existing sheet rows only. Do not use LinkedIn for discovery in Job 2.
-2. Locate the row by LinkedIn URL first, then verify Company Name + Full Name.
-3. Run the ZoomInfo order above without guessing.
-4. If the first ZoomInfo search misses, complete the full name-variant ladder before treating the row as a miss.
-5. If a confident match exists, set `K=Enriched` and write:
+2. Read the row: company from column `A`, contact from column `B`.
+3. Locate the row by LinkedIn URL first, then verify Company Name + Full Name.
+4. Run the ZoomInfo order above without guessing.
+5. Core accuracy rule: before writing anything, the contact found in ZoomInfo must match the sheet contact in column `B` (allowing only approved nickname/full-name variants). If the contact does not match, do NOT write; first correct the row identity issue or treat the result as `Not Found`.
+6. If the first ZoomInfo search misses, complete the full name-variant ladder before treating the row as a miss.
+7. If a confident match exists, set `K=Enriched` and write:
    - `H=<business email (B)>` or exactly `No Email`
    - `I=<mobile (M)>` or exactly `No Phone`
-6. If no confident match exists after the full search ladder and the company IT-department fallback, set:
+8. If no confident match exists after the full search ladder and the company IT-department fallback, set:
    - `K=Not Found`
    - `H=Not Found`
    - `I=Not Found`
-7. Before finalizing a company, recheck every provisional `Not Found` row once with broader name variants.
-8. Never append a brand-new person during Job 2. Missing people belong to Job 1.
-9. Keep going until every targeted `K=Pending` row is resolved or a real blocker stops execution.
+9. Before every write, re-check column `B` and confirm the matched contact is the correct person for that row.
+10. Verify immediately after every write: correct row, correct values. If wrong, fix immediately.
+11. Before finalizing a company, recheck every provisional `Not Found` row once with broader name variants.
+12. Never append a brand-new person during Job 2. Missing people belong to Job 1.
+13. Keep going until every targeted row is resolved or a real blocker stops execution.
+14. Final output happens only at the very end: report job complete and rows updated count.
 
 Phase 2 remains incomplete while any current-run row has `K=Pending` and no real blocker exists.
 Phase 2 remains incomplete while any targeted row has `K=Pending` and no real blocker exists.

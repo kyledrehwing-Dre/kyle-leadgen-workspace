@@ -71,7 +71,13 @@ Phase 2 remains incomplete while any current-run row has `K=Pending` and no real
   - allowed systems: ZoomInfo + Google Sheets
   - input: existing sheet rows
   - output: `H/I/K/L/N` resolved from ZoomInfo evidence
+  - primary objective: fill column `H` (work email) and column `I` (mobile phone)
   - no LinkedIn discovery or new-contact appends inside Job 2
+  - execution mode only: no mid-task stopping, no progress updates, no explanation-mode replies
+  - once a company starts, finish all targeted contacts for that company before moving on unless a real blocker occurs
+  - before writing, the matched ZoomInfo contact must match sheet column `B` (approved nickname/full-name variants only)
+  - re-check row identity before writing and verify the exact row/values immediately after writing
+  - final output should happen only after the job/company is complete or blocked
 
 ### Status Invariants
 - **Daily Targets / column C:** Pending | In Progress | Completed | Blocked | Skipped
