@@ -53,8 +53,16 @@ For each eligible company:
 
 ## ZoomInfo loop
 1. Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
-2. Fallback: company page -> Employees -> Information Technology department.
-3. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+2. If the first search misses, run the required name-variant ladder before declaring `Not Found`:
+   - exact full name + company
+   - nickname/full-first-name swap
+   - without middle initial
+   - with middle initial / punctuation variant
+3. Fallback: company page -> Employees -> Information Technology department.
+4. If a confident match exists, write `K=Enriched`, `H=(B) or No Email`, and `I=(M) or No Phone`.
+5. If no confident match exists after the full ladder + fallback, write `K=Not Found`, `H=Not Found`, and `I=Not Found`.
+6. Never use HQ `(HQ)` or direct `(D)` phone in place of mobile `(M)` for column `I`.
+7. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
 Locate writeback rows by LinkedIn URL first, then verify Company Name + Full Name.
 Never write ZoomInfo data by row number alone.

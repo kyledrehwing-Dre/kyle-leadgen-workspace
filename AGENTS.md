@@ -37,10 +37,26 @@ Do not switch methods silently; log the exact reason when falling back.
 
 ## ZoomInfo enrichment order
 1. Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
-2. Fallback: company page -> Employees -> Information Technology department.
-3. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+2. If the first search misses, run the required name-variant ladder before declaring `Not Found`:
+   - exact full name + company
+   - nickname/full-first-name swap (for example `Doug` <-> `Douglas`)
+   - without middle initial
+   - with middle initial / punctuation variant
+3. Fallback: company page -> Employees -> Information Technology department.
+4. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
 Batch convenience must never weaken row-identity rules.
+
+## ZoomInfo write rules
+- If a confident ZoomInfo contact match exists:
+  - set `K=Enriched`
+  - write column `H` from business email `(B)` or exactly `No Email`
+  - write column `I` from mobile `(M)` or exactly `No Phone`
+- If no confident ZoomInfo contact match exists after the full search ladder and fallback:
+  - set `K=Not Found`
+  - write column `H` exactly `Not Found`
+  - write column `I` exactly `Not Found`
+- Never use HQ `(HQ)` or direct `(D)` phone as a substitute for mobile `(M)` in column `I`.
 
 ## Sheets invariants
 Only operate these tabs: `Daily Targets` and `Updated Format`.
@@ -93,10 +109,16 @@ For each eligible company:
 For current-run rows where `M=RUN_ID` and `K=Pending`:
 1. Locate the row by LinkedIn URL first, then verify Company Name + Full Name.
 2. Run the ZoomInfo order above without guessing.
-3. If no confident match after Advanced Search and the company IT-department fallback, mark `K=Not Found`.
-4. If a confident match lacks one field, write `No email` or `No phone` as appropriate.
-5. If no confident match exists, write `Not Found` values consistently and verify the write.
-6. Keep going until every current-run `K=Pending` row is resolved or a real blocker stops execution.
+3. If the first ZoomInfo search misses, complete the full name-variant ladder before treating the row as a miss.
+4. If a confident match exists, set `K=Enriched` and write:
+   - `H=<business email (B)>` or exactly `No Email`
+   - `I=<mobile (M)>` or exactly `No Phone`
+5. If no confident match exists after the full search ladder and the company IT-department fallback, set:
+   - `K=Not Found`
+   - `H=Not Found`
+   - `I=Not Found`
+6. Before finalizing a company, recheck every provisional `Not Found` row once with broader name variants.
+7. Keep going until every current-run `K=Pending` row is resolved or a real blocker stops execution.
 
 Phase 2 remains incomplete while any current-run row has `K=Pending` and no real blocker exists.
 

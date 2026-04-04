@@ -68,7 +68,15 @@ Phase 2 remains incomplete while any current-run row has `K=Pending` and no real
 ### ZoomInfo Access
 - Browser-based (logged in)
 - Canonical order: Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
+- Required search ladder before `Not Found`:
+  - exact full name + company
+  - nickname/full-first-name swap
+  - without middle initial
+  - with middle initial / punctuation variant
 - Fallback: company page -> Employees -> Information Technology department.
+- If a confident match exists: `K=Enriched`, `H=(B) or No Email`, `I=(M) or No Phone`.
+- If no confident match exists after the full ladder + fallback: `K=Not Found`, `H=Not Found`, `I=Not Found`.
+- Never use HQ `(HQ)` or direct `(D)` phone in place of mobile `(M)` for column `I`.
 - Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
 ### LinkedIn Session
