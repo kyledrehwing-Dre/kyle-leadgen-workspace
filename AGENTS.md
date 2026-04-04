@@ -200,12 +200,19 @@ You are executing a job, not having a conversation.
 
 8. **INCORPORATE-AND-CONTINUE RULE** — when the user provides updated execution rules or process corrections during an active job, incorporate them into the SOP/workflow immediately and continue the active company/job without pausing for confirmation or row-by-row replies unless blocked.
 
-Execution-mode non-negotiables:
-- Do NOT stop mid-task.
-- Do NOT send progress updates.
-- Do NOT switch into explanation mode.
-- Work continuously until all targeted rows are done or a real blocker occurs.
-- Once you start a company, finish ALL targeted contacts for that company before moving on.
+9. **SPEED CONTROL (MANDATORY)** — after each of the following actions, wait 1–2 seconds: after each ZoomInfo search, after opening a contact, after copying email, after copying phone, after writing to the sheet. After each row: wait 2 seconds.
+
+10. **BATCH RULE** — after every 10 rows completed, pause for 20–30 seconds then continue.
+
+11. **COMPANY TRANSITION RULE** — when starting a new company, wait 3–5 seconds before searching.
+
+12. **RETRY RULE** — if an action fails, wait 3–5 seconds and retry once only. If it fails again, treat as a blocker and stop and report.
+
+13. **RATE LIMIT RULE** — if "API rate limit reached" is seen, stop immediately, wait 60–120 seconds, resume from the last completed row, and continue at a slower pace.
+
+14. **WRITE ACCURACY RULE** — before writing, confirm Column B matches the contact. After writing, confirm data is in the correct row. If mismatch, fix immediately.
+
+15. **MENTAL MODEL** — work steadily, do not stop, do not talk, finish the job.
 
 For current-run rows where `M=RUN_ID` and `K=Pending`:
 1. Start from existing sheet rows only. Do not use LinkedIn for discovery in Job 2.
