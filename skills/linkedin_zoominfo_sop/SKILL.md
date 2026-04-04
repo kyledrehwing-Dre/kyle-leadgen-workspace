@@ -47,6 +47,68 @@ Company ambiguity is a blocker.
 Always verify company context before every search.
 Always open the full profile for every kept contact.
 
+## ZoomInfo Contact Profile Data Extraction
+When a ZoomInfo Contact Profile page is open, extract data using the patterns below. The label `(B)`, `(M)`, `(D)`, `(HQ)` appears on the line AFTER the value, not before it.
+
+### ZoomInfo phone/email section format (verbatim)
+```
+Phone numbers
+(646) 447-6646
+(D)
+Call
+(646) 447-5000
+(HQ)
+Call
+(347) 504-5895
+(M)
+Call
+...
+Email addresses
+b_olk@emblemhealth.com
+(B)
+```
+The mobile number is on its own line; the label `(M)` is on the next line. The email is on its own line; the label `(B)` is on the next line.
+
+### Mandatory mobile-phone logic — simply find `(M)`
+Once a confident contact match is open, do **not** write `No Phone` until the Phone numbers section has been checked for an exact `(M)` label.
+
+Use this exact logic:
+```javascript
+const phoneSection = (txt.match(/Phone numbers[\s\S]{0,800}/i) || [''])[0];
+const lines = phoneSection.split('\n').map(s => s.trim()).filter(Boolean);
+let mobile = null;
+for (let i = 0; i < lines.length; i++) {
+  if (lines[i] === '(M)') {
+    mobile = lines[i - 1] || null;
+    break;
+  }
+}
+```
+Rules:
+- Simply find the exact `(M)` line.
+- Use the line immediately above `(M)` for column `I`.
+- If no exact `(M)` exists in the full Phone numbers block, then write `No Phone`.
+- Never use `(D)` or `(HQ)` as substitutes for mobile.
+
+### Business Email (B) — correct extraction
+```javascript
+txt.match(/([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})\s*\n\(B\)/i)
+// Returns email in match[1]
+```
+
+### Rejection rule for wrong-person matches
+If ZoomInfo returns a contact whose name does not match the sheet Full Name (ignoring middle initials and nicknames), reject the match entirely. Do not use that email or phone. Mark `K=Not Found` instead.
+
+### Write rules
+- `K=Enriched`: confident match found
+  - `H = (B) email` or exactly `No Email`
+  - `I = (M) mobile` or exactly `No Phone`
+- `K=Not Found`: no confident match after full search ladder + fallback
+  - `H = Not Found`
+  - `I = Not Found`
+- Never use `(HQ)` or `(D)` in place of `(M)` for column I
+- `No Phone` is allowed only after an explicit scan confirms there is no exact `(M)` entry on the matched contact profile
+
 ## ZoomInfo enrichment order
 1. Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
 2. Fallback: company page -> Employees -> Information Technology department.

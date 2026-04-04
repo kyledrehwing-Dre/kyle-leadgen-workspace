@@ -83,6 +83,50 @@ Batch convenience must never weaken row-identity rules.
   - write column `I` exactly `Not Found`
 - Never use HQ `(HQ)` or direct `(D)` phone as a substitute for mobile `(M)` in column `I`.
 
+### ZoomInfo Contact Profile extraction — mobile-first verification
+ZoomInfo innerText returns phone/email values on one line and their `(B)`, `(M)`, `(D)`, `(HQ)` labels on the next line. The `\n` IS present between the value and label.
+
+**ZoomInfo phone section format (verbatim from browser):**
+```
+Phone numbers
+(646) 447-6646
+(D)
+Call
+(646) 447-5000
+(HQ)
+Call
+(347) 504-5895
+(M)
+Call
+```
+
+**Mandatory mobile logic:** simply find the exact `(M)` in the Phone numbers block.
+
+```javascript
+const phoneSection = (txt.match(/Phone numbers[\s\S]{0,800}/i) || [''])[0];
+const lines = phoneSection.split('\n').map(s => s.trim()).filter(Boolean);
+let mobile = null;
+for (let i = 0; i < lines.length; i++) {
+  if (lines[i] === '(M)') {
+    mobile = lines[i - 1] || null;
+    break;
+  }
+}
+```
+
+Rules:
+- Find the exact `(M)` line.
+- Use the line immediately above `(M)` for column `I`.
+- If there is no exact `(M)` anywhere in the full Phone numbers block, then write `No Phone`.
+- Never use `(D)` or `(HQ)` as substitutes.
+
+**Business Email (B):**
+```javascript
+txt.match(/([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})\s*\n\(B\)/i)
+```
+
+**Rejection rule:** If ZoomInfo returns a contact whose name does not match the sheet Full Name (ignoring middle initials and nicknames), reject the match entirely. Mark `K=Not Found` instead.
+
 ## Sheets invariants
 Only operate these tabs: `Daily Targets` and `Updated Format`.
 Datastore = Google Sheets only.
@@ -148,6 +192,7 @@ For current-run rows where `M=RUN_ID` and `K=Pending`:
 8. Never append a brand-new person during Job 2. Missing people belong to Job 1.
 9. Keep going until every targeted `K=Pending` row is resolved or a real blocker stops execution.
 
+Phase 2 remains incomplete while any current-run row has `K=Pending` and no real blocker exists.
 Phase 2 remains incomplete while any targeted row has `K=Pending` and no real blocker exists.
 
 ## Completion invariants
