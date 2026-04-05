@@ -121,14 +121,21 @@ This prevents false negatives like row 308, where the contact existed in plain v
 - `No Phone` is allowed only after an explicit scan confirms there is no exact `(M)` entry on the matched contact profile
 
 ## ZoomInfo enrichment order
-1. **Advanced Search → Contact Name → Company Name → Search** (this exact sequence, every contact):
-   - Open Advanced Search panel
-   - Click "Contact Name or Email" filter button to expand it
-   - **Type the person's full name first** in the Contact Name textbox
-   - Add Company Name filter, expand it, type the company name
-   - Execute search
-   - **Do NOT use Quick Search** — it is unreliable for automation
-2. If the search misses, run the required name-variant ladder before declaring `Not Found`:
+**⚠️ CRITICAL — Wrong order is the #1 cause of failure:**
+- **ALWAYS search by Contact Name FIRST, then Company Name**
+- Starting with company name returns hundreds of rows — wrong
+- Starting with contact name often returns 1–5 rows — correct
+- **NEVER use Quick Search** — it searches by company/keyword, not person
+
+**The correct sequence (every single contact, no exceptions):**
+1. Click **Advanced Search**
+2. Click **"Contact Name or Email"** filter → type **[PERSON'S FULL NAME]** ← this MUST come first
+3. Click **"Add filter"** → **Company Name** → type **[COMPANY NAME]**
+4. Press **Enter** or click **Search**
+5. Click the correct person's profile from the results
+6. Extract email (B) and mobile (M)
+
+**If the search returns 0 results:** run name variants (nickname, no middle initial, with middle initial) before declaring Not Found.
    - exact full name + company
    - nickname/full-first-name swap
    - without middle initial
