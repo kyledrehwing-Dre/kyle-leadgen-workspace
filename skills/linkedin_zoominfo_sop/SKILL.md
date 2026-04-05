@@ -121,9 +121,22 @@ This prevents false negatives like row 308, where the contact existed in plain v
 - `No Phone` is allowed only after an explicit scan confirms there is no exact `(M)` entry on the matched contact profile
 
 ## ZoomInfo enrichment order
-1. Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
-2. Fallback: company page -> Employees -> Information Technology department.
-3. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+1. **Advanced Search → Contact Name → Company Name → Search.** This exact sequence:
+   - Open Advanced Search panel
+   - Click "Contact Name or Email" filter button to expand it
+   - Type the person's full name in the Contact Name textbox
+   - Add Company Name filter, expand it, type the company name
+   - Execute search
+   - **Do NOT use Quick Search** — it is unreliable for automation and returns noisy results
+2. If the search misses, run the required name-variant ladder before declaring `Not Found`:
+   - exact full name + company
+   - nickname/full-first-name swap
+   - without middle initial
+   - with middle initial / punctuation variant
+3. Fallback: company page -> Employees -> Information Technology department.
+4. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+
+**ZoomInfo SPA browser note:** ZoomInfo's web app is client-side rendered. Browser navigation to search results URLs may redirect unexpectedly. If the direct URL approach fails, fall back to the UI-based Advanced Search sequence above. Once a company profile page is loaded (e.g. `/apps/profile/company/{id}/employees`), individual contact profile pages can be navigated to directly via `/apps/profile/person/{id}/contact-profile` and do render correctly.
 
 Batch convenience must never weaken row-identity rules.
 
