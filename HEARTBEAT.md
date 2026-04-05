@@ -82,6 +82,7 @@ For each targeted row when running Job 2:
 
 Locate writeback rows by LinkedIn URL first, then verify Company Name + Full Name.
 Never write ZoomInfo data by row number alone.
+Phase 2 remains incomplete while any current-run row has `K=Pending` and no real blocker exists.
 Phase 2 remains incomplete while any targeted row has `K=Pending` and no real blocker exists.
 
 ## Status invariants

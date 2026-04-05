@@ -87,7 +87,7 @@ Phase 2 remains incomplete while any current-run row has `K=Pending` and no real
 
 ### ZoomInfo Access
 - Browser-based (logged in)
-- Canonical order: Advanced Search -> Clear All -> Contact Name or Email -> Company Name -> widen confidence to All contacts / 50-100 before declaring Not Found.
+- Canonical order: Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
 - Anti-improvisation rule: do not use Quick Search, unfiltered result browsing, or profile hopping before the canonical Advanced Search field sequence is complete. When company context is known, Company Name must be applied before candidate evaluation.
 - Required lookup gate: a valid ZoomInfo lookup must record Advanced Search used, Clear All used, Contact Name or Email field applied, Company Name field applied when known, and candidate profile opened only after narrowing.
 - Required search ladder before `Not Found`:

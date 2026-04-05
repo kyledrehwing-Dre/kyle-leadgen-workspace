@@ -1,0 +1,23 @@
+row	full_name	zoominfo_match	email	phone	original_correct	notes
+202	Aaron P.	not_found_different_company	Not Found	Not Found	yes	Aaron Prato found in ZoomInfo at Atlas Copco Group, NOT Comcast. Original Not Found confirmed correct.
+203	Adeola Theophilus	not_found	Not Found	Not Found	yes	No results found for Adeola Theophilus in ZoomInfo. Original Not Found confirmed correct.
+202	Aaron P.	not_found_different_company	Not Found	Not Found	yes	Aaron Prato found in ZoomInfo at Atlas Copco Group, NOT Comcast. Original Not Found confirmed correct.
+203	Adeola Theophilus	not_found	Not Found	Not Found	yes	No ZoomInfo record for Adeola Theophilus. Original Not Found confirmed correct.
+204	Ajay Kumar	match_no_biz_email	No email	(541) 963-7509	no	FALSE NEGATIVE: Ajay Kumar, Sdet 2 @ Comcast Spotlight. No business email. HQ phone: (541) 963-7509. Sheet updated.
+205	Allen Kolison	match_no_biz_email	No email	(215) 500-2059	no	FALSE NEGATIVE: Allen Kolison, Network Tech 2 @ Comcast. No business email. Mobile: (215) 500-2059. Sheet updated.
+206	Balu K	not_found_different_company	Not Found	Not Found	yes	Search for Balu K Comcast redirected to Gharda Chemicals company page. NOT at Comcast. Original Not Found confirmed correct.
+207	Bill Martin	not_found_different_company	Not Found	Not Found	yes	Billy Martin found at Hif (Australian insurance company), CIO. NOT at Comcast. Original Not Found confirmed correct.
+208	Bill Smith	not_found_different_company	Not Found	Not Found	yes	Search for Bill Smith Comcast returned Smith Micro Software company page, not a Bill Smith person at Comcast. Original Not Found confirmed correct.
+209	Brian Hurd	not_found_different_company	Not Found	Not Found	yes	Brian Hurd found at County of Ventura (Manager Network & Security). NOT Comcast. Original Not Found confirmed correct.
+210	Brian Weir	match_comcast_spotlight_departed	brian_weir@comcast.com	(785) 341-8001	no	FALSE NEGATIVE: Brian Weir, Manager Incident @ Comcast Spotlight. Email: brian_weir@comcast.com. Mobile: (785) 341-8001. DEPARTED Aug 7 2020 - no longer active. Sheet updated with departure note.
+211	Bruce Shapiro	not_found_different_company	Not Found	Not Found	yes	Bruce Shapiro found as CEO at Shapiro Metals, St. Louis. NOT Comcast. Original Not Found confirmed correct.
+212	Caroline Swinyer	match	No email	(732) 546-6578	no	FALSE NEGATIVE: Caroline Swinyer @ Comcast. No business email. Mobile: (732) 546-6578. Original Not Found is WRONG. Sheet updated.
+213	Chengmao Tsai	match	chengmao_tsai@comcast.com	(856) 371-0322	no	FALSE NEGATIVE: Chengmao Tsai, Network Service Integration Principal & Solutions Engineer @ Comcast. Email: chengmao_tsai@comcast.com. Mobile: (856) 371-0322. Original Not Found is WRONG. Sheet updated.
+214	Dan Tennant	not_found_different_company	Not Found	Not Found	yes	Daniel B. Tennant found at Ten Eighty Hospitality. NOT Comcast. Original Not Found confirmed correct.
+216	Gokul Mathiyalagan	not_found_different_company	Not Found	Not Found	yes	Gokul Mathiyalagan found in ZoomInfo at Infosys. NOT Comcast. Original Not Found confirmed correct.
+216	Gokul Mathiyalagan	not_found_different_company	Not Found	Not Found	yes	Gokul Mathiyalagan found at Infosys. NOT Comcast. Original Not Found confirmed correct.
+217	Jennifer Sicilia	not_found_different_company	Not Found	Not Found	yes	Jennifer Sicilia found in ZoomInfo at RYCOM (VP & GM). NOT Comcast. Original Not Found confirmed correct.
+218	Jermaine Williams	not_found_different_company	Not Found	Not Found	yes	Jermaine Williams found at Keller Williams Jamaica (real estate). NOT Comcast. Original Not Found confirmed correct.
+219	Jim Hailson	match	jim_hailson@comcast.com	(541) 963-7509	no	FALSE NEGATIVE: Jim Hailson, Operations Director IT @ Comcast Spotlight. Email: jim_hailson@comcast.com. Phone: (541) 963-7509, (617) 279-1172. Original Not Found is WRONG. Sheet updated.
+220	John Dasaro	not_found_different_company	Not Found	Not Found	yes	John Dasaro found at Johns Auto Shop (Mechanic). NOT Comcast. Original Not Found confirmed correct.
+221	Julia Zillman	match_no_biz_email	No email	(215) 286-1700	no	FALSE NEGATIVE: Julie Zillman, Advanced Innovations & Technologies Engineer @ Comcast. No business email. HQ phone: (215) 286-1700. Original Not Found is WRONG. Sheet updated.

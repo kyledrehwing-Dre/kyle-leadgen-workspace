@@ -1,0 +1,23 @@
+row	full_name	zoominfo_match	email	phone	original_correct	notes
+300	Carl Cabalbag	not_found_different_company	Not Found	Not Found	yes	Search for Carl Cabalbag Comcast returned Charles Comcast.Net - a Comcast email account holder, not a Comcast employee. NOT Carl Cabalbag. Original Not Found confirmed correct.
+301	David Gago	not_found_different_company	Not Found	Not Found	yes	David Gago found at University of La Verne (Professor). NOT Comcast. Original Not Found confirmed correct.
+300	Carl Cabalbag	not_found_different_company	Not Found	Not Found	yes	Search for Carl Cabalbag Comcast returned Charles Comcast.Net - a Comcast email account holder. NOT at Comcast as employee. Original Not Found confirmed correct.
+301	David Gago	not_found_different_company	Not Found	Not Found	yes	David Gago found at University of La Verne (Professor). NOT Comcast. Original Not Found confirmed correct.
+302	Felice Wong	not_found_different_company	Not Found	Not Found	yes	Felice Wong found at AlikeAudience (digital marketing). NOT Comcast. Original Not Found confirmed correct.
+303	Joann Cacciaguida-Wiedre	match	fwiedre@comcast.com	(215) 280-7291	no	FALSE NEGATIVE: Joann Cacciaguida-Wiedre, Sr. Project Manager WiFi Engineering @ Comcast. Email: fwiedre@comcast.com. Mobile: (215) 280-7291. Original Not Found is WRONG. Sheet updated.
+304	John Marcelino	not_found_different_company	Not Found	Not Found	yes	John Marcelino found at EmblemHealth (Director, Operations-Shared Services). NOT Comcast. Original Not Found confirmed correct.
+305	Jonathan Rodriguez	not_found_different_company	Not Found	Not Found	yes	Jonathan Rodriguez found at J.B. Hunt Transport (Senior Director, Operations). NOT Comcast. Original Not Found confirmed correct.
+306	Linda Henderson	not_found_different_company	Not Found	Not Found	yes	Linda Henderson found at J.B. Henderson Construction (Construction). NOT Comcast. Original Not Found confirmed correct.
+307	Thomas MacMillan	not_found_different_company	Not Found	Not Found	yes	Thomas MacMillan found at Allied Plastics (Manufacturing/Distribution). NOT Comcast. Original Not Found confirmed correct.
+308	Vivek Paliwal	not_found_different_company	Not Found	Not Found	yes	Vivek Paliwal found at Purecotz Eco Lifestyles Pvt (India). NOT Comcast. Original Not Found confirmed correct.
+309	Abhishek Warde	not_found_different_company	Not Found	Not Found	yes	Abhishek Warde found at Nationwide (Senior DevOps Engineer & Architect). NOT Comcast. Original Not Found confirmed correct.
+310	Alex Zavgorodni	not_found	Not Found	Not Found	yes	No ZoomInfo record found for Alex Zavgorodni. Original Not Found confirmed correct.
+311	Alton Janeway	not_found_different_company	Not Found	Not Found	yes	Alton Janeway found at EmblemHealth (Assistant VP, Cyber Architecture & Intelligence). NOT Comcast. Original Not Found confirmed correct.
+312	Aneley Admassie	not_found_different_company	Not Found	Not Found	yes	Aneley Admassie found at EmblemHealth (Senior IIB, MQ and DataPower Developer). NOT Comcast. Original Not Found confirmed correct.
+313	Angela Bidinger	not_found	Not Found	Not Found	yes	No ZoomInfo record found for Angela Bidinger. Original Not Found confirmed correct.
+314	Ankitkumar Barot	not_found_different_company	Not Found	Not Found	yes	Ankitkumar Barot found at Plethora/Motivate (Integration Architect & Senior Developer). NOT Comcast. Original Not Found confirmed correct.
+315	Anu B	not_found_no_person_record	Not Found	Not Found	yes	Search for Anu B returned Space2b Gallery company page, not a person named Anu B at Comcast. Original Not Found confirmed correct.
+316	Anusha M	not_found_different_company	Not Found	Not Found	yes	Anusha M found at Goldman Sachs (VP). NOT Comcast. Original Not Found confirmed correct.
+317	Ashley DePasquale	not_found_different_company	Not Found	Not Found	yes	Ashley DePasquale found at Nestle Health Science. NOT Comcast. Original Not Found confirmed correct.
+318	Ayisat Eyesan	not_found	Not Found	Not Found	yes	ZoomInfo says 'Try using Advanced Search or Submit a Research Request to add Ayisat Eyesan Comcast to the database.' No record found. Original Not Found confirmed correct.
+319	Baldev Singh	not_found_different_company	Not Found	Not Found	yes	Baldev Singh found at Amandeep Singh Insurance Agency. NOT Comcast. Original Not Found confirmed correct.
