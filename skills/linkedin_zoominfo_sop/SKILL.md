@@ -121,19 +121,19 @@ This prevents false negatives like row 308, where the contact existed in plain v
 - `No Phone` is allowed only after an explicit scan confirms there is no exact `(M)` entry on the matched contact profile
 
 ## ZoomInfo enrichment order
-1. **Advanced Search → Contact Name → Company Name → Search.** This exact sequence:
+1. **Advanced Search → Contact Name → Company Name → Search** (this exact sequence, every contact):
    - Open Advanced Search panel
    - Click "Contact Name or Email" filter button to expand it
-   - Type the person's full name in the Contact Name textbox
+   - **Type the person's full name first** in the Contact Name textbox
    - Add Company Name filter, expand it, type the company name
    - Execute search
-   - **Do NOT use Quick Search** — it is unreliable for automation and returns noisy results
+   - **Do NOT use Quick Search** — it is unreliable for automation
 2. If the search misses, run the required name-variant ladder before declaring `Not Found`:
    - exact full name + company
    - nickname/full-first-name swap
    - without middle initial
    - with middle initial / punctuation variant
-3. Fallback: company page -> Employees -> Information Technology department.
+3. Fallback: company page → Employees → Information Technology department.
 4. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
 **ZoomInfo SPA browser note:** ZoomInfo's web app is client-side rendered. Browser navigation to search results URLs may redirect unexpectedly. If the direct URL approach fails, fall back to the UI-based Advanced Search sequence above. Once a company profile page is loaded (e.g. `/apps/profile/company/{id}/employees`), individual contact profile pages can be navigated to directly via `/apps/profile/person/{id}/contact-profile` and do render correctly.
@@ -182,6 +182,8 @@ Every sub-agent session must initialize its own browser before doing any ZoomInf
 
 **For LinkedIn work:** initialize the same way with `browser open url=https://www.linkedin.com` and verify login state before searching.
 
+**For ZoomInfo searches:** Always use Advanced Search → Contact Name → Company Name (described in Phase 2 below). Never use Quick Search.
+
 ## Preflight (run before any search or write)
 1. Run `bash scripts/validate_linkedin_zoominfo_sop.sh`. Stop if validation fails.
 2. Verify spreadsheet ID and required tabs (`Daily Targets`, `Updated Format`).
@@ -215,19 +217,38 @@ For each eligible company:
 ## Phase 2 - ZoomInfo enrichment
 Default scope: current-run rows where `M=RUN_ID` and `K=Pending`.
 
-For each pending row:
-1. Locate writeback rows by LinkedIn URL first, then verify Company Name + Full Name.
-2. Run ZoomInfo Advanced Search in this exact order:
-   - Clear All
-   - Contact Full Name
-   - Company
-   - widen confidence to All contacts / 50-100 before declaring Not Found
-3. If a confident match is found, capture business email and mobile when available.
-4. If Advanced Search fails or yields a false negative, use the company page -> Employees -> Information Technology department fallback.
-5. If batch export or bulk enrichment is available and exact mapping is proven by LinkedIn URL first, then Company Name + Full Name, it may be used as an accelerator only.
-6. If no confident match remains after the primary path and fallback, mark `K=Not Found`.
-7. If a confident match exists but one field is missing, write `No email` or `No phone` as appropriate.
-8. Write results safely, then run post-write verification.
+**For every ZoomInfo lookup, you MUST use this exact Advanced Search sequence:**
+
+### Step 1 — Advanced Search → Contact Name → Company Name (required for EVERY contact)
+1. Click the **Advanced Search** button in ZoomInfo
+2. In the filter panel, click **"Contact Name or Email"** filter button to expand it
+3. **Type the person's FULL NAME** in the Contact Name textbox (ref=e37 or similar)
+4. Click **"Add filter"** or scroll to **Company Name** section and expand it
+5. **Type the company name** in the Company Name textbox
+6. Press **Enter** or click **Search** to execute
+7. Results will appear below — find the correct person at the correct company, click their profile, extract email (B) and mobile (M)
+
+**IMPORTANT: Always enter the person's full name FIRST, then the company name. Do NOT use Quick Search.**
+
+### Step 2 — If no match found
+Run the name-variant ladder:
+- exact full name + company
+- nickname/full-first-name swap (e.g. "Bob" ↔ "Robert")
+- without middle initial
+- with middle initial / punctuation variant
+
+### Step 3 — Fallback
+Company page → Employees → Information Technology department.
+
+### Step 4 — Write results
+- K=Enriched + email (B) + mobile (M) if found
+- K=Not Found if no confident match after full ladder + fallback
+- K=Enriched + No Email / No Phone if profile found but contact data missing
+
+### Step 5 — Post-write verification
+Re-locate the row by LinkedIn URL and confirm written values match.
+
+**Never skip steps 1–3. Never use Quick Search. Never declare Not Found while an obvious candidate remains unopened.**
 
 Phase 2 remains incomplete while any current-run row has `K=Pending` and no real blocker exists.
 
