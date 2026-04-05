@@ -121,27 +121,36 @@ This prevents false negatives like row 308, where the contact existed in plain v
 - `No Phone` is allowed only after an explicit scan confirms there is no exact `(M)` entry on the matched contact profile
 
 ## ZoomInfo enrichment order
+Primary order: Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
+Fallback: company page -> Employees -> Information Technology department.
+Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+
 **⚠️ CRITICAL — Wrong order is the #1 cause of failure:**
 - **ALWAYS search by Contact Name FIRST, then Company Name**
 - Starting with company name returns hundreds of rows — wrong
 - Starting with contact name often returns 1–5 rows — correct
 - **NEVER use Quick Search** — it searches by company/keyword, not person
+- **ALWAYS use Clear All** before applying filters so stale filters do not contaminate results
+- Before declaring `Not Found`, widen confidence/scope to **All contacts / 50-100** as required by the canonical flow
 
 **The correct sequence (every single contact, no exceptions):**
 1. Click **Advanced Search**
-2. Click **"Contact Name or Email"** filter → type **[PERSON'S FULL NAME]** ← this MUST come first
-3. Click **"Add filter"** → **Company Name** → type **[COMPANY NAME]**
-4. Press **Enter** or click **Search**
-5. Click the correct person's profile from the results
-6. Extract email (B) and mobile (M)
+2. Click **Clear All**
+3. Click **"Contact Name or Email"** filter → type **[PERSON'S FULL NAME]** ← this MUST come first
+4. Click **"Add filter"** → **Company Name** → type **[COMPANY NAME]**
+5. Press **Enter** or click **Search**
+6. Widen confidence/scope to **All contacts / 50-100** before declaring `Not Found`
+7. Click the correct person's profile from the results
+8. Extract email (B) and mobile (M)
 
 **If the search returns 0 results:** run name variants (nickname, no middle initial, with middle initial) before declaring Not Found.
-   - exact full name + company
-   - nickname/full-first-name swap
-   - without middle initial
-   - with middle initial / punctuation variant
-3. Fallback: company page → Employees → Information Technology department.
-4. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+- exact full name + company
+- nickname/full-first-name swap
+- without middle initial
+- with middle initial / punctuation variant
+
+Fallback: company page -> Employees -> Information Technology department.
+Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
 **ZoomInfo SPA browser note:** ZoomInfo's web app is client-side rendered. Browser navigation to search results URLs may redirect unexpectedly. If the direct URL approach fails, fall back to the UI-based Advanced Search sequence above. Once a company profile page is loaded (e.g. `/apps/profile/company/{id}/employees`), individual contact profile pages can be navigated to directly via `/apps/profile/person/{id}/contact-profile` and do render correctly.
 
