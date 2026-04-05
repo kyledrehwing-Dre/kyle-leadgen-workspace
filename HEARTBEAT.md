@@ -68,17 +68,18 @@ For each eligible company when running Job 1:
 ## ZoomInfo loop
 For each targeted row when running Job 2:
 1. Start from the sheet row only; do not use LinkedIn discovery here.
-2. Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
-3. If the first search misses, run the required name-variant ladder before declaring `Not Found`:
+2. **Always search fresh.** Never skip a contact based on prior K status or prior run notes.
+3. Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
+4. If the first search misses, run the required name-variant ladder before declaring `Not Found`:
    - exact full name + company
    - nickname/full-first-name swap
    - without middle initial
    - with middle initial / punctuation variant
-4. Fallback: company page -> Employees -> Information Technology department.
-5. If a confident match exists, write `K=Enriched`, `H=(B) or No Email`, and `I=(M) or No Phone`.
-6. If no confident match exists after the full ladder + fallback, write `K=Not Found`, `H=Not Found`, and `I=Not Found`.
-7. Never use HQ `(HQ)` or direct `(D)` phone in place of mobile `(M)` for column `I`.
-8. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+5. Fallback: company page -> Employees -> Information Technology department.
+6. If a confident match exists, write `K=Enriched`, `H=(B) or No Email`, and `I=(M) or No Phone`.
+7. If no confident match exists after the full ladder + fallback, write `K=Not Found`, `H=Not Found`, and `I=Not Found`.
+8. Never use HQ `(HQ)` or direct `(D)` phone in place of mobile `(M)` for column `I`.
+9. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
 Locate writeback rows by LinkedIn URL first, then verify Company Name + Full Name.
 Never write ZoomInfo data by row number alone.

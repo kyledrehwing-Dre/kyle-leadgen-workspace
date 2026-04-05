@@ -63,6 +63,7 @@ Phase 2 remains incomplete while any current-run row has `K=Pending` and no real
 
 ## ZoomInfo method
 - Primary: Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
+- **Always search every contact fresh.** Never skip a search because a prior run or prior notes marked the person as Not Found, Enriched, or any other K status. Treat every row as unsearched.
 - Hard anti-improvisation rule: do not use Quick Search, raw result browsing, or profile hopping before completing the Advanced Search field sequence above. When company context is known, apply Company Name before evaluating any candidates.
 - Validation gate: a lookup is not valid unless the working path includes all of: Advanced Search used, Clear All used, Contact Name or Email field applied, Company Name field applied when known, and profile opened only after narrowing.
 - Required search ladder before `Not Found`:
