@@ -156,13 +156,25 @@ Post-write verification: re-locate the row by LinkedIn URL and confirm written v
 - Not Found
 - Blocked
 
-## Preflight
-1. Run `bash scripts/validate_linkedin_zoominfo_sop.sh`.
-2. If validation fails, stop before any browser or sheet action.
-3. Verify spreadsheet ID and required tabs.
-4. Create `RUN_ID=YYYYMMDD-HHMMSS`.
-5. Verify the browser/session that actually attaches to Kyle's logged-in Chrome session.
-6. Verify LinkedIn login and ZoomInfo login.
+## Sub-agent browser initialization (required before any ZoomInfo work)
+Every sub-agent session must initialize its own browser before doing any ZoomInfo work. Do not assume a parent session's browser is available or stable.
+
+**Required steps at the start of every sub-agent task:**
+1. Call `browser start profile=openclaw` to spawn a fresh browser session.
+2. Call `browser open url=https://app.zoominfo.com` to navigate to ZoomInfo.
+3. Call `browser snapshot` to verify the page loaded correctly.
+4. If the snapshot shows a login page, checkpoint, or unexpected state, retry up to 3 times with a 5-second wait between attempts.
+5. Proceed with searches only after confirmed ZoomInfo session is active.
+6. If browser cannot be verified after 3 attempts, stop and report the blocker — do not attempt to continue with a broken browser session.
+
+**For LinkedIn work:** initialize the same way with `browser open url=https://www.linkedin.com` and verify login state before searching.
+
+## Preflight (run before any search or write)
+1. Run `bash scripts/validate_linkedin_zoominfo_sop.sh`. Stop if validation fails.
+2. Verify spreadsheet ID and required tabs (`Daily Targets`, `Updated Format`).
+3. Create `RUN_ID=YYYYMMDD-HHMMSS`.
+4. Verify LinkedIn login and ZoomInfo login in the initialized browser session.
+5. Proceed only after all five steps pass.
 
 ## Phase 1 - LinkedIn capture
 For each eligible company:
