@@ -79,9 +79,11 @@ For each targeted row when running Job 2:
 6. If a confident match exists, write `K=Enriched`, `H=(B) or No Email`, and `I=(M) or No Phone`.
 7. If no confident match exists after the full ladder + fallback, write `K=Not Found`, `H=Not Found`, and `I=Not Found`.
 8. Never use HQ `(HQ)` or direct `(D)` phone in place of mobile `(M)` for column `I`.
-9. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+9. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by Company Name + Full Name.
+10. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
 Locate writeback rows by LinkedIn URL first, then verify Company Name + Full Name.
+Locate writeback rows by Company Name + Full Name.
 Never write ZoomInfo data by row number alone.
 Phase 2 remains incomplete while any current-run row has `K=Pending` and no real blocker exists.
 Phase 2 remains incomplete while any targeted row has `K=Pending` and no real blocker exists.

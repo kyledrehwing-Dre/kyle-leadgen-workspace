@@ -46,13 +46,16 @@ Browser session rule: try to attach to Kyle's existing logged-in Chrome session 
 - Only operate these tabs: `Daily Targets` and `Updated Format`.
 - Datastore = Google Sheets only.
 - Dedupe key = LinkedIn URL.
+- Dedupe key = Company Name + Full Name (for ZoomInfo enrichment work; LinkedIn URL is the sheet dedupe key for Job 1 discovery only).
 - Locate writeback rows by LinkedIn URL first, then verify Company Name + Full Name.
+- Locate writeback rows by Company Name + Full Name.
 - Never write ZoomInfo data by row number alone.
 - Never assume end-of-sheet is empty.
 - Verify destination row/range before append/update.
 - Never overwrite verified data with weaker data.
 - Never delete data.
 - Post-write verification: re-locate the row by LinkedIn URL and confirm written values match.
+- Post-write verification: re-locate the row by Company Name and Full Name and confirm written values match.
 Never ask the user for permission to continue while valid work remains.
 Phase 2 remains incomplete while any current-run row has `K=Pending` and no real blocker exists.
 
@@ -76,6 +79,7 @@ Phase 2 remains incomplete while any current-run row has `K=Pending` and no real
 - Write rule on no confident match after ladder + fallback: `K=Not Found`, `H=Not Found`, `I=Not Found`.
 - Never use HQ `(HQ)` or direct `(D)` phone in place of mobile `(M)` for column `I`.
 - Before writing `Not Found`, open any obvious ZoomInfo candidate that matches full name + company context. Do not declare `Not Found` while an obvious unopened candidate remains in results.
+- Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by Company Name + Full Name.
 - Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
 ### ZoomInfo Contact Profile extraction — mobile-first verification

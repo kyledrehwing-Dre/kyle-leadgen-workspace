@@ -123,6 +123,7 @@ This prevents false negatives like row 308, where the contact existed in plain v
 ## ZoomInfo enrichment order
 Primary order: Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
 Fallback: company page -> Employees -> Information Technology department.
+Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by Company Name + Full Name.
 Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
 **⚠️ CRITICAL — Wrong order is the #1 cause of failure:**
@@ -131,17 +132,20 @@ Optional accelerator: batch export or bulk enrichment is allowed only when exact
 - Starting with contact name often returns 1–5 rows — correct
 - **NEVER use Quick Search** — it searches by company/keyword, not person
 - **ALWAYS use Clear All** before applying filters so stale filters do not contaminate results
+- **ALWAYS press Enter after typing each filter value** — typing alone does NOT apply the filter; you must confirm with Enter or by selecting an autocomplete value
 - Before declaring `Not Found`, widen confidence/scope to **All contacts / 50-100** as required by the canonical flow
 
 **The correct sequence (every single contact, no exceptions):**
 1. Click **Advanced Search**
 2. Click **Clear All**
 3. Click **"Contact Name or Email"** filter → type **[PERSON'S FULL NAME]** ← this MUST come first
-4. Click **"Add filter"** → **Company Name** → type **[COMPANY NAME]**
-5. Press **Enter** or click **Search**
-6. Widen confidence/scope to **All contacts / 50-100** before declaring `Not Found`
-7. Click the correct person's profile from the results
-8. Extract email (B) and mobile (M)
+4. **Press Enter** to confirm the Contact Name filter — typing alone does NOT apply the filter
+5. Click **"Add filter"** → **Company Name** → type **[COMPANY NAME]**
+6. **Press Enter** to confirm the Company Name filter
+7. Click **Search** to execute
+8. Widen confidence/scope to **All contacts / 50-100** before declaring `Not Found`
+9. Click the correct person's profile from the results
+10. Extract email (B) and mobile (M)
 
 **If the search returns 0 results:** run name variants (nickname, no middle initial, with middle initial) before declaring Not Found.
 - exact full name + company
@@ -150,7 +154,7 @@ Optional accelerator: batch export or bulk enrichment is allowed only when exact
 - with middle initial / punctuation variant
 
 Fallback: company page -> Employees -> Information Technology department.
-Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by Company Name + Full Name.
 
 **ZoomInfo SPA browser note:** ZoomInfo's web app is client-side rendered. Browser navigation to search results URLs may redirect unexpectedly. If the direct URL approach fails, fall back to the UI-based Advanced Search sequence above. Once a company profile page is loaded (e.g. `/apps/profile/company/{id}/employees`), individual contact profile pages can be navigated to directly via `/apps/profile/person/{id}/contact-profile` and do render correctly.
 
@@ -158,13 +162,16 @@ Batch convenience must never weaken row-identity rules.
 
 ## Sheet invariants
 Dedupe key = LinkedIn URL.
+Dedupe key = LinkedIn URL (Job 1 — LinkedIn discovery).
 Locate writeback rows by LinkedIn URL first, then verify Company Name + Full Name.
+Locate writeback rows by Company Name + Full Name (Job 2 — ZoomInfo enrichment).
 Never write ZoomInfo data by row number alone.
 Never assume end-of-sheet is empty.
 Verify destination row/range before append/update.
 Never overwrite verified data with weaker data.
 Never delete data.
 Post-write verification: re-locate the row by LinkedIn URL and confirm written values match.
+Post-write verification: re-locate the row by Company Name + Full Name and confirm written values match.
 
 ## Explicit status values
 ### `Daily Targets` column C allowed values
@@ -239,12 +246,14 @@ Default scope: current-run rows where `M=RUN_ID` and `K=Pending`.
 1. Click the **Advanced Search** button in ZoomInfo
 2. In the filter panel, click **"Contact Name or Email"** filter button to expand it
 3. **Type the person's FULL NAME** in the Contact Name textbox (ref=e37 or similar)
-4. Click **"Add filter"** or scroll to **Company Name** section and expand it
-5. **Type the company name** in the Company Name textbox
-6. Press **Enter** or click **Search** to execute
-7. Results will appear below — find the correct person at the correct company, click their profile, extract email (B) and mobile (M)
+4. **Press Enter** to confirm the Contact Name filter — typing alone does NOT apply the filter
+5. Click **"Add filter"** or scroll to **Company Name** section and expand it
+6. **Type the company name** in the Company Name textbox
+7. **Press Enter** to confirm the Company Name filter
+8. Click **Search** to execute
+9. Results will appear below — find the correct person at the correct company, click their profile, extract email (B) and mobile (M)
 
-**IMPORTANT: Always enter the person's full name FIRST, then the company name. Do NOT use Quick Search.**
+**IMPORTANT: Always enter the person's full name FIRST, then the company name. Always press Enter after each filter value. Typing alone does NOT apply the filter. Do NOT use Quick Search.**
 
 ### Step 2 — If no match found
 Run the name-variant ladder:
@@ -262,7 +271,7 @@ Company page → Employees → Information Technology department.
 - K=Enriched + No Email / No Phone if profile found but contact data missing
 
 ### Step 5 — Post-write verification
-Re-locate the row by LinkedIn URL and confirm written values match.
+Re-locate the row by Company Name + Full Name and confirm written values match.
 
 **Never skip steps 1–3. Never use Quick Search. Never declare Not Found while an obvious candidate remains unopened.**
 
@@ -275,7 +284,7 @@ Stop and report if any of these occur:
 - captcha/checkpoint/anti-automation challenge appears
 - wrong company context or ambiguous company scope
 - required tabs or required columns are missing
-- destination row cannot be located by LinkedIn URL
+- destination row cannot be located by Company Name + Full Name
 - post-write verification fails
 
 ## Completion invariant

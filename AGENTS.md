@@ -70,7 +70,8 @@ Do not switch methods silently; log the exact reason when falling back.
    - without middle initial
    - with middle initial / punctuation variant
 5. Fallback: company page -> Employees -> Information Technology department.
-6. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+6. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by Company Name + Full Name.
+7. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
 Batch convenience must never weaken row-identity rules.
 
@@ -135,12 +136,14 @@ Only operate these tabs: `Daily Targets` and `Updated Format`.
 Datastore = Google Sheets only.
 Dedupe key = LinkedIn URL.
 Locate writeback rows by LinkedIn URL first, then verify Company Name + Full Name.
+Locate writeback rows by Company Name + Full Name.
 Never write ZoomInfo data by row number alone.
 Never assume end-of-sheet is empty.
 Verify destination row/range before append/update.
 Never overwrite verified data with weaker data.
 Never delete data.
 Post-write verification: re-locate the row by LinkedIn URL and confirm written values match.
+Post-write verification: re-locate the row by Company Name and Full Name and confirm written values match.
 
 ## Status invariants
 ### `Daily Targets` column C allowed values
@@ -217,7 +220,7 @@ You are executing a job, not having a conversation.
 For current-run rows where `M=RUN_ID` and `K=Pending`:
 1. Start from existing sheet rows only. Do not use LinkedIn for discovery in Job 2.
 2. Read the row: company from column `A`, contact from column `B`.
-3. Locate the row by LinkedIn URL first, then verify Company Name + Full Name.
+3. Locate the row by Company Name + Full Name.
 4. Run the ZoomInfo order above without guessing.
 5. Core accuracy rule: before writing anything, the contact found in ZoomInfo must match the sheet contact in column `B` (allowing only approved nickname/full-name variants). If the contact does not match, do NOT write; first correct the row identity issue or treat the result as `Not Found`.
 6. If the first ZoomInfo search misses, complete the full name-variant ladder before treating the row as a miss.
