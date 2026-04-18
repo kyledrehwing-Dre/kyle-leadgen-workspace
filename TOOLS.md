@@ -69,12 +69,14 @@ Phase 2 remains incomplete while any current-run row has `K=Pending` and no real
 - **Always search every contact fresh.** Never skip a search because a prior run or prior notes marked the person as Not Found, Enriched, or any other K status. Treat every row as unsearched.
 - Hard anti-improvisation rule: do not use Quick Search, raw result browsing, or profile hopping before completing the Advanced Search field sequence above. When company context is known, apply Company Name before evaluating any candidates.
 - Validation gate: a lookup is not valid unless the working path includes all of: Advanced Search used, Clear All used, Contact Name or Email field applied, Company Name field applied when known, and profile opened only after narrowing.
+- Fallback: company page -> Employees -> Information Technology department. **⚠️ HARD STOP — 0 results = IT-department fallback, same day:** If the name-variant ladder produces no match, the search is NOT complete. Go to company page → Employees → Information Technology department and browse. Only after IT-department browse produces no candidate may `K=Not Found` be written.
+- **⚠️ HARD STOP — Partial name contacts:** Any contact with a partial name in column B (e.g. "Brian H.", "Luis G.") must have the LinkedIn URL (column F) opened first to extract the verified full first name. Search ZoomInfo with the full name from LinkedIn.
+- **⚠️ HARD STOP — Profile must be opened and verified before any write:** Before writing any result, open the ZoomInfo contact profile and confirm: (a) name matches sheet Full Name (allowing nickname/full-name variants only), (b) title is consistent with sheet Job Title, (c) company is the target company. Writing without this verification is a process violation.
 - Required search ladder before `Not Found`:
   - exact full name + company
   - nickname/full-first-name swap
   - without middle initial
   - with middle initial / punctuation variant
-- Fallback: company page -> Employees -> Information Technology department.
 - Write rule on confident match: `K=Enriched`, `H=(B) or No Email`, `I=(M) or No Phone`.
 - Write rule on no confident match after ladder + fallback: `K=Not Found`, `H=Not Found`, `I=Not Found`.
 - Never use HQ `(HQ)` or direct `(D)` phone in place of mobile `(M)` for column `I`.

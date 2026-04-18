@@ -69,18 +69,20 @@ For each eligible company when running Job 1:
 For each targeted row when running Job 2:
 1. Start from the sheet row only; do not use LinkedIn discovery here.
 2. **Always search fresh.** Never skip a contact based on prior K status or prior run notes.
-3. Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
-4. If the first search misses, run the required name-variant ladder before declaring `Not Found`:
+3. **⚠️ HARD STOP — Partial name contacts:** Any contact with a partial name in column B (e.g. "Brian H.", "Luis G.") must have the LinkedIn URL (column F) opened first to extract the verified full first name. Search ZoomInfo with the full name from LinkedIn — not the partial name from the sheet.
+4. Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
+5. If the first search misses, run the required name-variant ladder before declaring `Not Found`:
    - exact full name + company
    - nickname/full-first-name swap
    - without middle initial
    - with middle initial / punctuation variant
-5. Fallback: company page -> Employees -> Information Technology department.
-6. If a confident match exists, write `K=Enriched`, `H=(B) or No Email`, and `I=(M) or No Phone`.
-7. If no confident match exists after the full ladder + fallback, write `K=Not Found`, `H=Not Found`, and `I=Not Found`.
-8. Never use HQ `(HQ)` or direct `(D)` phone in place of mobile `(M)` for column `I`.
-9. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by Company Name + Full Name.
-10. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+6. Fallback: company page -> Employees -> Information Technology department. **⚠️ HARD STOP — 0 results = IT-department fallback, same day:** If the name-variant ladder still produces no match, the search is NOT complete. Go to the company page → Employees → Information Technology department and browse. Do not mark `K=Not Found` while this path remains untried. Only after the IT-department fallback produces no candidate may `K=Not Found` be written.
+7. **⚠️ HARD STOP — Profile must be opened and verified before any write:** Before writing anything, open the ZoomInfo contact profile and confirm name + title + company match the sheet row. Writing without this verification is a process violation — the write must be redone.
+8. If a confident match exists, write `K=Enriched`, `H=(B) or No Email`, and `I=(M) or No Phone`.
+9. If no confident match exists after the full ladder + fallback, write `K=Not Found`, `H=Not Found`, and `I=Not Found`.
+10. Never use HQ `(HQ)` or direct `(D)` phone in place of mobile `(M)` for column `I`.
+11. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by Company Name + Full Name.
+12. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
 Locate writeback rows by LinkedIn URL first, then verify Company Name + Full Name.
 Locate writeback rows by Company Name + Full Name.

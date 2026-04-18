@@ -1,0 +1,276 @@
+{
+  "version": 1,
+  "updatedAt": "2026-04-17T03:54:04.248Z",
+  "entries": {
+    "memory:memory/2026-04-03.md:40:58": {
+      "key": "memory:memory/2026-04-03.md:40:58",
+      "path": "memory/2026-04-03.md",
+      "startLine": 40,
+      "endLine": 58,
+      "source": "memory",
+      "snippet": "- explicit stop: do not perform ZoomInfo enrichment inside Job 1 - Job 2 = ZoomInfo enrichment: - systems allowed: ZoomInfo + Google Sheets - purpose: enrich existing sheet rows only - inputs: existing sheet rows, preferably `K=Pending` - explicit stop: do not use LinkedIn for discovery and do not append brand-new people inside Job 2 - Files updated to lock this in: `AGENTS.md`, `TOOLS.md`, `USER.md`, and `HEARTBEAT.md`. ## 2026-04-03 23:06 America/New_York — EmblemHealth Job 2 ZoomInfo enrichment (rows 289–365) - Run started: Job 2 — ZoomInfo enrichment only for EmblemHealth block rows 289–365. - Browser automation used: `profile=openclaw`, fresh Chrome tab opened at `https://app",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "totalScore": 0.8017836657704674,
+      "maxScore": 0.8017836657704674,
+      "firstRecalledAt": "2026-04-15T23:30:27.885Z",
+      "lastRecalledAt": "2026-04-15T23:30:27.885Z",
+      "queryHashes": [
+        "2ce1a5236594"
+      ],
+      "recallDays": [
+        "2026-04-15"
+      ],
+      "conceptTags": [
+        "brand-new",
+        "agents.md",
+        "tools.md",
+        "user.md",
+        "heartbeat.md",
+        "america/new-york",
+        "explicit",
+        "stop"
+      ]
+    },
+    "memory:memory/2026-04-03.md:22:45": {
+      "key": "memory:memory/2026-04-03.md:22:45",
+      "path": "memory/2026-04-03.md",
+      "startLine": 22,
+      "endLine": 45,
+      "source": "memory",
+      "snippet": "- `Doug Taylor` required retry as `Douglas Taylor`. - `Kim M Briggs` required retry without the middle initial to surface `Kim M. Briggs`. - Workspace SOP updated in `AGENTS.md`, `TOOLS.md`, `USER.md`, and `HEARTBEAT.md`. - New required ZoomInfo rule moving forward: - do not finalize `Not Found` after the first miss - retry exact full name + company, nickname/full-first-name swap, without middle initial, and with middle initial / punctuation variant - only then use company-page fallback and finalize - New write rule moving forward: - confident match -> `K=Enriched`, `H=(B) or No Email`, `I=(M) or No Phone` - no confident match after full ladder + fallback -> `K=Not Found`, `H=N",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "totalScore": 0.7928903329996682,
+      "maxScore": 0.7928903329996682,
+      "firstRecalledAt": "2026-04-15T23:30:27.885Z",
+      "lastRecalledAt": "2026-04-15T23:30:27.885Z",
+      "queryHashes": [
+        "2ce1a5236594"
+      ],
+      "recallDays": [
+        "2026-04-15"
+      ],
+      "conceptTags": [
+        "agents.md",
+        "tools.md",
+        "user.md",
+        "heartbeat.md",
+        "nickname/full-first-name",
+        "company-page",
+        "doug",
+        "taylor"
+      ]
+    },
+    "memory:memory/2026-03-13.md:34:65": {
+      "key": "memory:memory/2026-03-13.md:34:65",
+      "path": "memory/2026-03-13.md",
+      "startLine": 34,
+      "endLine": 65,
+      "source": "memory",
+      "snippet": "3. **Marc Zukerman** - Senior Director, PMO & Service Delivery at Hearst - Location: Rockville Centre, New York - LinkedIn: https://www.linkedin.com/in/marczukerman/ - Background: MIT Sloan, 11 yrs at Hearst - Quality: Executive level (500+ connections) ## Additional Contacts Found (from \"More profiles for you\") 4. **Atti Riazi** - Senior Vice President and Chief Information Officer at Hearst - Location: New York, New York - LinkedIn: https://www.linkedin.com/in/atti-riazi-13b4442/ - Background: Former UN Assistant Secretary-General & CIO, Ex-MSK CIO, Stony Brook PhD, Founder of CIOs Without Borders - Quality: TOP TIER - Actual CIO of Hearst! 5. **Jim Bazzano** - SV",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "totalScore": 0.7785529428422685,
+      "maxScore": 0.7785529428422685,
+      "firstRecalledAt": "2026-04-15T23:30:27.885Z",
+      "lastRecalledAt": "2026-04-15T23:30:27.885Z",
+      "queryHashes": [
+        "2ce1a5236594"
+      ],
+      "recallDays": [
+        "2026-04-15"
+      ],
+      "conceptTags": [
+        "www.linkedin.com/in/marczukerman",
+        "secretary-general",
+        "ex-msk",
+        "marc",
+        "zukerman",
+        "senior",
+        "director",
+        "pmo"
+      ]
+    },
+    "memory:memory/2026-03-18.md:1:49": {
+      "key": "memory:memory/2026-03-18.md:1:49",
+      "path": "memory/2026-03-18.md",
+      "startLine": 1,
+      "endLine": 49,
+      "source": "memory",
+      "snippet": "# Run Summary - 2026-03-18 ## Company: Wyndham Hotels & Resorts ### RUN_ID run-2026-03-18-185126-wyndham ### Status: ✅ COMPLETED ### Terms Searched (10/10) 1. IT operations ✓ 2. Cloud Operations ✓ 3. DevOps ✓ 4. Infrastructure ✓ 5. Enterprise Architecture ✓ 6. Observability ✓ 7. Site Reliability Engineer (SRE) ✓ 8. Change Management ✓ 9. Incident management ✓ 10. AI ✓ ### Contacts Added: 33 #### TOP TIER (Executive/Security): 1. **Eric Brohm** - SVP, CISO & Architecture ⭐ KEY 2. **Michael Mahar** - Head of Commercial Technology and AI ⭐ KEY 3. **Josh Dow** - VP, Hotel Technology Strategy & Services ⭐ KEY 4. Joseph Gothelf - VP, Cybersecurity 5. Ottavio D'Archangelo - Sr. Director, Info",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "totalScore": 0.8367233343103938,
+      "maxScore": 0.8367233343103938,
+      "firstRecalledAt": "2026-04-17T03:54:04.248Z",
+      "lastRecalledAt": "2026-04-17T03:54:04.248Z",
+      "queryHashes": [
+        "84c64a9a9b95"
+      ],
+      "recallDays": [
+        "2026-04-16"
+      ],
+      "conceptTags": [
+        "run-id",
+        "run-2026-03-18-185126-wyndham",
+        "10/10",
+        "executive/security",
+        "run",
+        "summary",
+        "company",
+        "wyndham"
+      ]
+    },
+    "memory:memory/2026-02-27.md:1:27": {
+      "key": "memory:memory/2026-02-27.md:1:27",
+      "path": "memory/2026-02-27.md",
+      "startLine": 1,
+      "endLine": 27,
+      "source": "memory",
+      "snippet": "# Run Summary - 2026-02-27 ## Companies Processed (from Daily Targets - 2/26 batch) 1. **PepsiCo** - 17 leads 2. **KeyBank** - 14 leads 3. **Emblem Health** - 8 leads 4. **The Vanguard Group** - 10 leads 5. **Memorial Sloan Kettering** - 8 leads 6. **Delaware North** - 4 leads 7. **Sodexo** - 6 leads 8. **Moog Inc** - 6 leads 9. **Healthfirst** - 9 leads 10. **Navy Federal Credit Union** - 5 leads **Total New Leads:** 87 ## Notes - ZoomInfo blocked by verification challenge - proceeded with LinkedIn data only - Used OpenClaw-managed browser for LinkedIn searches - All leads added to Google Sheet \"Original Sheet Q1-2026\" - LinkedIn URL used as unique key for deduplication - Run started a",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "totalScore": 0.8150959457826062,
+      "maxScore": 0.8150959457826062,
+      "firstRecalledAt": "2026-04-17T03:54:04.248Z",
+      "lastRecalledAt": "2026-04-17T03:54:04.248Z",
+      "queryHashes": [
+        "84c64a9a9b95"
+      ],
+      "recallDays": [
+        "2026-04-16"
+      ],
+      "conceptTags": [
+        "2/26",
+        "openclaw-managed",
+        "q1-2026",
+        "run",
+        "summary",
+        "companies",
+        "processed",
+        "targets"
+      ]
+    },
+    "memory:memory/2026-03-06.md:1:39": {
+      "key": "memory:memory/2026-03-06.md:1:39",
+      "path": "memory/2026-03-06.md",
+      "startLine": 1,
+      "endLine": 39,
+      "source": "memory",
+      "snippet": "# Run Summary - March 6, 2026 ## Today's Pipeline Runs (Completed) | Company | Leads Added | Status | |---------|-------------|--------| | Moody's | 31 | ✓ | | M&T Bank | 36 | ✓ | | Ametek | 20 | ✓ | | Barclays | 26 | ✓ | | Tapestry | 10 | ✓ | | Campbell Soup | 13 | ✓ | | Comcast | 19 | ✓ | | Perdue Farms | 12 | ✓ | | Mars | 15 | ✓ | | Woori Bank | 9 | ✓ | | Amtrak | 9 | ✓ | | PepsiCo | 10 | ✓ | | Key Bank | 10 | ✓ | | Emblem Health | 9 | ✓ | | The Vanguard Group | 10 | ✓ | | Memorial Sloan Kettering | 10 | ✓ | | Delaware North | 9 | ✓ | | Sodexo | 10 | ✓ | | Moog | 10 | ✓ | | Healthfirst | 10 | ✓ | | Navy Federal Credit Union | 10 | ✓ | ### Total Leads Added Today: 298 --- ### Notes -",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "totalScore": 0.8095521595006557,
+      "maxScore": 0.8095521595006557,
+      "firstRecalledAt": "2026-04-17T03:54:04.248Z",
+      "lastRecalledAt": "2026-04-17T03:54:04.248Z",
+      "queryHashes": [
+        "84c64a9a9b95"
+      ],
+      "recallDays": [
+        "2026-04-16"
+      ],
+      "conceptTags": [
+        "run",
+        "summary",
+        "march",
+        "today's",
+        "pipeline",
+        "runs",
+        "completed",
+        "company"
+      ]
+    },
+    "memory:memory/2026-03-18.md:41:68": {
+      "key": "memory:memory/2026-03-18.md:41:68",
+      "path": "memory/2026-03-18.md",
+      "startLine": 41,
+      "endLine": 68,
+      "source": "memory",
+      "snippet": "15. Nathan Park - Sr Director, Infrastructure AEC 16. Maheedhar Imadabathuni - Lead InfoSec Engineer 17. Shannon Miller - Manager, Identity & Access Management #### Technical Staff: 18. Mark Sugarman - Sr. Systems Engineer 19. Rajendra Setru - Systems Engineer 20. Ibraheem Sharaf - Security Operations Engineer 21. Srikanth kanteti - Sr. AEM Tech Lead 22. Latha Yeshwant - Technical Manager 23. Luis G. - Manager, Network & Security Operations 24. Sadik Mallad - Sr. IT Manager 25. Jodi Hendrickson - IT Leader, Quality/Automation/ITIL 26. Luis Valle - IT Manager 27. Atul Gupta - Sr. Director Hotel Technology Strategy 28. John Churchill - Manager, Technology Services 29. Mr.Paul Mugo - Security",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "totalScore": 0.8069907848745991,
+      "maxScore": 0.8069907848745991,
+      "firstRecalledAt": "2026-04-17T03:54:04.248Z",
+      "lastRecalledAt": "2026-04-17T03:54:04.248Z",
+      "queryHashes": [
+        "84c64a9a9b95"
+      ],
+      "recallDays": [
+        "2026-04-16"
+      ],
+      "conceptTags": [
+        "network",
+        "quality/automation/itil",
+        "mr.paul",
+        "nathan",
+        "park",
+        "director",
+        "infrastructure",
+        "aec"
+      ]
+    },
+    "memory:memory/2026-03-03.md:79:121": {
+      "key": "memory:memory/2026-03-03.md:79:121",
+      "path": "memory/2026-03-03.md",
+      "startLine": 79,
+      "endLine": 121,
+      "source": "memory",
+      "snippet": "- Most searches for common names (John, Mike, David, Jennifer, etc.) return people at DIFFERENT companies - Capital One searches particularly difficult - many people with same names at other companies - Task is slow but continuing - Kyle asked to process ~100 more rows - Will continue until told to stop ### Latest Progress (4:53 PM) - Row 67: Leigh Dorris Woods - leigh.dorris@capitalone.com - (804) 366-6930 - Working through Capital One rows systematically - Continuing to row 150 ## Status Update (5:06 PM) - Session interrupted - ZoomInfo logged out - Completed rows 2-6 in this session - Need Kyle to log back in to ZoomInfo to continue - Target: Complete 100 rows total ## Progress Upda",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "totalScore": 0.6605304887490945,
+      "maxScore": 0.6605304887490945,
+      "firstRecalledAt": "2026-04-17T03:54:04.248Z",
+      "lastRecalledAt": "2026-04-17T03:54:04.248Z",
+      "queryHashes": [
+        "84c64a9a9b95"
+      ],
+      "recallDays": [
+        "2026-04-16"
+      ],
+      "conceptTags": [
+        "leigh.dorris",
+        "capitalone.com",
+        "366-6930",
+        "2-6",
+        "searches",
+        "common",
+        "names",
+        "john"
+      ]
+    },
+    "memory:memory/2026-03-03.md:54:85": {
+      "key": "memory:memory/2026-03-03.md:54:85",
+      "path": "memory/2026-03-03.md",
+      "startLine": 54,
+      "endLine": 85,
+      "source": "memory",
+      "snippet": "| 55 | Mike Tieu | Capital One | m.tieu@capitalone.com | No Phone | | 56 | Ashish Shah | Capital One | Not Found | Not Found | | 57 | Rutvik Mehta | Capital One | Not Found | Not Found | | 58 | Sanjay Shah | Capital One | Not Found | Not Found | | 59 | Neeraj Kumar | Capital One | Not Found | Not Found | | 60-65 | Various Capital One | Capital One | Not Found | Not Found | | 66 | Silvestre Rivas | Capital One | silvestre.rivas@capitalone.com | (347) 316-6446 | ### Fixed Errors - Row 44 (Leam Wright): Cleared wrong email - Row 45 (Ankit Goel): Added ankit.goel@barclays.com - Row 56 (Barbara Fernicola): Cleared wrong email (was m.tieu@capitalone.com) ## Status - Task in progress - currentl",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "totalScore": 0.6423500322402552,
+      "maxScore": 0.6423500322402552,
+      "firstRecalledAt": "2026-04-17T03:54:04.248Z",
+      "lastRecalledAt": "2026-04-17T03:54:04.248Z",
+      "queryHashes": [
+        "84c64a9a9b95"
+      ],
+      "recallDays": [
+        "2026-04-16"
+      ],
+      "conceptTags": [
+        "m.tieu",
+        "capitalone.com",
+        "60-65",
+        "silvestre.rivas",
+        "316-6446",
+        "ankit.goel",
+        "barclays.com",
+        "mike"
+      ]
+    }
+  }
+}

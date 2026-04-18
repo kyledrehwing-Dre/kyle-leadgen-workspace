@@ -137,19 +137,21 @@ This prevents false negatives like row 308, where the contact existed in plain v
 
 ## Search order
 1. Advanced Search -> Clear All -> Full Name -> Company -> widen confidence to All contacts / 50-100 before declaring Not Found.
-2. Fallback: company page -> Employees -> Information Technology department.
-3. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+2. Name-variant ladder: exact full name + company, nickname/full-first-name swap, without middle initial, with middle initial/punctuation variant.
+3. Fallback: company page -> Employees -> Information Technology department. **⚠️ HARD STOP — This fallback is mandatory before any Not Found declaration.** It is not optional and it is not a last resort. Only after the IT-department browse produces no candidate may `K=Not Found` be written.
+4. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
 
 ## Recommended execution pattern
 1. Run `bash scripts/validate_linkedin_zoominfo_sop.sh` first.
 2. Default scope = current-run rows where `M=RUN_ID` and `K=Pending`.
 3. For each row, locate it by LinkedIn URL first, then verify Company Name + Full Name.
-4. Try Advanced Search first.
-5. If Advanced Search misses a contact that should still be in scope, use company page -> Employees -> Information Technology department.
-6. If export/bulk is available, use it only when every exported record can be mapped back deterministically before writeback.
-7. If a match is ambiguous, do not guess. Mark `K=Blocked`, note the ambiguity, and report it.
-8. If no confident match exists after primary search and fallback, mark `K=Not Found`.
-9. After every write, run post-write verification.
+4. **⚠️ HARD STOP — Partial name contacts:** Any contact with a partial name in column B (e.g. "Brian H.", "Luis G.") must have the LinkedIn URL (column F) opened first to extract the verified full first name. Search ZoomInfo using the full name from LinkedIn — not the partial name from the sheet.
+5. Try Advanced Search first (Full Name + Company Name, with Enter confirmation after each filter value).
+6. If the name-variant ladder produces 0 results: **do not write Not Found** — immediately go to company page -> Employees -> IT department. Browse and open every candidate matching name and role before declaring Not Found.
+7. **⚠️ HARD STOP — Profile verification required before write:** After clicking a search result, open the ZoomInfo profile and confirm: (a) name matches sheet Full Name (allowing nickname/full-name variants only), (b) title is consistent with sheet Job Title, (c) company is the target company. Writing without this verification is a process violation — the write must be redone.
+8. If export/bulk is available, use it only when every exported record can be mapped back deterministically before writeback.
+9. If a match is ambiguous, do not guess. Mark `K=Blocked`, note the ambiguity, and report it.
+10. After every write, run post-write verification.
 
 ## Reporting
 For each company or batch slice, report:

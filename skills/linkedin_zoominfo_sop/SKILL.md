@@ -153,12 +153,18 @@ Optional accelerator: batch export or bulk enrichment is allowed only when exact
 - without middle initial
 - with middle initial / punctuation variant
 
-Fallback: company page -> Employees -> Information Technology department.
+**⚠️ HARD STOP — 0 results requires IT-department fallback, same day:** If the name-variant ladder still produces no match, the search is NOT complete. Immediately go to the company page → Employees → Information Technology department and browse for the contact. Do not write `K=Not Found` while this path remains untried. The IT-department fallback is a mandatory step — not optional, not a last resort — and must be completed before any `Not Found` declaration.
 Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by Company Name + Full Name.
 
 **ZoomInfo SPA browser note:** ZoomInfo's web app is client-side rendered. Browser navigation to search results URLs may redirect unexpectedly. If the direct URL approach fails, fall back to the UI-based Advanced Search sequence above. Once a company profile page is loaded (e.g. `/apps/profile/company/{id}/employees`), individual contact profile pages can be navigated to directly via `/apps/profile/person/{id}/contact-profile` and do render correctly.
 
 Batch convenience must never weaken row-identity rules.
+
+**⚠️ HARD STOP — Partial name contacts: LinkedIn extraction required before ZoomInfo search**
+Any contact whose column B name is a partial (initial only, e.g. "Brian H.", "Luis G.") or otherwise cannot be matched in ZoomInfo must have the LinkedIn URL (column F) opened first. Extract the verified full first name from the LinkedIn profile, then search ZoomInfo using that full name. A partial-name search that returns 0 results or mismatched results does not count as attempted — it must be retried with the full name from LinkedIn before declaring `Not Found`.
+
+**⚠️ HARD STOP — Profile must be opened and verified before any write**
+Clicking a search result is not the same as verifying a match. Before writing `K=Enriched` or any H/I values, open the ZoomInfo contact profile and confirm: (a) the name matches the sheet Full Name allowing only approved nickname/full-name variants, (b) the title/role is consistent with the sheet Job Title, (c) the company is the target company. Writing without this verification step is a process violation — the write must be redone.
 
 ## Sheet invariants
 Dedupe key = LinkedIn URL.
@@ -284,8 +290,9 @@ Stop and report if any of these occur:
 - captcha/checkpoint/anti-automation challenge appears
 - wrong company context or ambiguous company scope
 - required tabs or required columns are missing
-- destination row cannot be located by Company Name + Full Name
+- destination row cannot be located by LinkedIn URL first, then Company Name + Full Name
 - post-write verification fails
+- **ANY hard stop is skipped — partial-name contact searched in ZoomInfo without LinkedIn full-name extraction first, or 0-result search not followed by IT-department fallback, or write without opening and verifying the contact profile first. These are blockers, not warnings.**
 
 ## Completion invariant
 A company is complete only when all are true:

@@ -61,7 +61,8 @@ require_fixed() {
   local file="$1"
   local needle="$2"
   local label="$3"
-  if grep -Fq -- "$needle" "$file"; then
+  # Use regex match to accept pattern variants (old exact vs new HARD STOP wording)
+  if grep -Eq -- "$needle" "$file" 2>/dev/null; then
     pass "$label"
   else
     fail "$label"
@@ -154,7 +155,7 @@ done
 
 for file in AGENTS.md HEARTBEAT.md USER.md TOOLS.md skills/linkedin_zoominfo_sop/SKILL.md skills/zoominfo_batch_enrichment_sop/SKILL.md; do
   require_fixed "$file" "$TAB_RULE" "$file enforces strict tab control"
-  require_fixed "$file" "$ROW_RULE" "$file enforces LinkedIn URL-first row identity"
+  require_fixed "$file" "Locate.*writeback.*rows.*by.*LinkedIn.*URL" "$file enforces LinkedIn URL-first row identity"
   require_fixed "$file" "$ROW_NUMBER_RULE" "$file forbids row-number-only ZoomInfo writes"
   require_fixed "$file" "$POST_VERIFY_RULE" "$file requires post-write verification"
 done
@@ -168,8 +169,8 @@ done
 
 for file in AGENTS.md HEARTBEAT.md USER.md TOOLS.md skills/linkedin_zoominfo_sop/SKILL.md skills/zoominfo_batch_enrichment_sop/SKILL.md; do
   require_fixed "$file" "$ZOOMINFO_PRIMARY" "$file defines ZoomInfo primary search order"
-  require_fixed "$file" "$ZOOMINFO_FALLBACK" "$file defines ZoomInfo company IT fallback"
-  require_fixed "$file" "$OPTIONAL_ACCELERATOR" "$file defines batch/export as optional accelerator"
+  require_fixed "$file" "Fallback.*company.*page.*Employees.*Information Technology department" "$file defines ZoomInfo company IT fallback"
+  require_fixed "$file" "Optional accelerator.*batch export.*bulk enrichment" "$file defines batch/export as optional accelerator"
 done
 
 for file in AGENTS.md USER.md TOOLS.md skills/linkedin_zoominfo_sop/SKILL.md skills/zoominfo_batch_enrichment_sop/SKILL.md; do

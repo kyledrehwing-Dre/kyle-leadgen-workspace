@@ -69,9 +69,13 @@ Do not switch methods silently; log the exact reason when falling back.
    - nickname/full-first-name swap (for example `Doug` <-> `Douglas`)
    - without middle initial
    - with middle initial / punctuation variant
-5. Fallback: company page -> Employees -> Information Technology department.
-6. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by Company Name + Full Name.
-7. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+5. Fallback: company page -> Employees -> Information Technology department. **⚠️ HARD STOP — 0 results = IT-department fallback, same day:** If the name-variant ladder still produces no match, the search is NOT complete. Go to the company page → Employees → Information Technology department and browse. Do not mark `K=Not Found` while this path remains untried. Only after the IT-department fallback produces no candidate may `K=Not Found` be written.
+6. **⚠️ HARD STOP — Partial name contacts:** Any contact with a partial name in column B (e.g. "Brian H.", "Luis G.") must have the LinkedIn URL (column F) opened first to extract the verified full first name. Search ZoomInfo with the full name from LinkedIn — not the partial name from the sheet.
+7. **⚠️ HARD STOP — Profile must be opened and verified before any write:** Before writing anything, open the ZoomInfo contact profile and confirm: (a) name matches sheet Full Name (allowing nickname/full-name variants only), (b) title is consistent with sheet Job Title, (c) company is the target company. Writing without this verification is a process violation.
+8. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by Company Name + Full Name.
+9. Optional accelerator: batch export or bulk enrichment is allowed only when exact row mapping is proven by LinkedIn URL first, then Company Name + Full Name.
+
+**These three hard stops are mandatory for every contact. Skipping any of them is a blocker, not a warning.**
 
 Batch convenience must never weaken row-identity rules.
 
